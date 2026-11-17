@@ -1,0 +1,215 @@
+/* =========================
+   Actions icons
+========================= */
+.dt-actions{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.dt-icon{
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: 8px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.dt-icon i{ font-size: 18px; line-height: 1; }
+.dt-icon:hover{ background: rgba(88,86,214,0.10) !important; }
+html.dark-theme .dt-icon:hover,
+body.dark-theme .dt-icon:hover{ background: rgba(199,201,255,0.10) !important; }
+
+/* =========================
+   DT toolbar responsive
+========================= */
+.dt-scope .dataTables_wrapper .dataTables_length,
+.dt-scope .dataTables_wrapper .dataTables_filter{ margin: 8px 0 12px 0; }
+
+@media (min-width: 768px){
+  .dt-scope .dataTables_wrapper .dataTables_length{ float: left; }
+  .dt-scope .dataTables_wrapper .dataTables_filter{ float: right; text-align: right; }
+}
+
+@media (max-width: 767.98px){
+  .dt-scope .dataTables_wrapper .dataTables_length,
+  .dt-scope .dataTables_wrapper .dataTables_filter{
+    width: 100% !important;
+    text-align: left !important;
+  }
+  .dt-scope .dataTables_wrapper .dataTables_filter label{ width: 100%; display:block; }
+  .dt-scope .dataTables_wrapper .dataTables_filter input{
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    display: block;
+  }
+}
+
+/* IMPORTANT: Do NOT force x-scroll wrapper, let responsive collapse happen */
+.dt-scope .dt-table-wrapper{ width: 100%; }
+
+/* =========================
+   Responsive control column
+========================= */
+
+/* hidden by default, show only when table has `.collapsed` */
+table.dataTable > thead > tr > th.dtr-control,
+table.dataTable > tbody > tr > td.dtr-control{
+  display: none !important;
+}
+
+table.dataTable.collapsed > thead > tr > th.dtr-control,
+table.dataTable.collapsed > tbody > tr > td.dtr-control{
+  display: table-cell !important;
+  width: 44px !important;
+  padding: 0 !important;
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Remove default arrow */
+table.dataTable td.dtr-control:before{
+  content: '' !important;
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* + icon */
+table.dataTable.collapsed > tbody > tr > td.dtr-control:before{
+  content: '+' !important;
+  display: inline-flex !important;
+  width: 28px !important;
+  height: 28px !important;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px !important;
+  font-weight: 900 !important;
+  font-size: 18px !important;
+  background: rgba(88,86,214,0.14);
+  border: 1px solid rgba(88,86,214,0.30);
+  color: #5856d6;
+}
+
+/* expanded -> minus */
+table.dataTable.collapsed > tbody > tr.parent > td.dtr-control:before{
+  content: '−' !important;
+}
+
+/* hover */
+table.dataTable.collapsed > tbody > tr > td.dtr-control:hover:before{
+  background: rgba(88,86,214,0.20);
+  border-color: rgba(88,86,214,0.40);
+}
+
+/* dark */
+html.dark-theme table.dataTable.collapsed > tbody > tr > td.dtr-control:before,
+body.dark-theme table.dataTable.collapsed > tbody > tr > td.dtr-control:before{
+  background: rgba(88,86,214,0.24);
+  border-color: rgba(88,86,214,0.40);
+  color: rgba(255,255,255,0.92);
+}
+
+/* =========================
+   CoreUI theme alignment (Light + Dark)
+========================= */
+.dt-scope .dt-filter-card{
+  background: var(--cui-tertiary-bg);
+  border: 1px solid var(--cui-border-color);
+  color: var(--cui-body-color);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.dt-scope .dt-filter-card .form-label{
+  font-weight: 600;
+  font-size: .85rem;
+  color: var(--cui-body-color);
+}
+
+/* Table surface */
+.dt-scope table.dataTable{
+  color: var(--cui-body-color);
+  background: var(--cui-body-bg);
+}
+
+.dt-scope .table thead th{
+  background: var(--cui-tertiary-bg) !important;
+  color: var(--cui-body-color) !important;
+  border-bottom: 1px solid var(--cui-border-color);
+}
+
+.dt-scope .table tbody td{
+  border-top: 1px solid var(--cui-border-color);
+}
+
+.dt-scope .table tbody tr:hover{
+  background: color-mix(in srgb, var(--cui-tertiary-bg) 65%, transparent);
+}
+
+/* DataTables controls: search, length, paging */
+.dt-scope .dataTables_wrapper .dataTables_filter input,
+.dt-scope .dataTables_wrapper .dataTables_length select{
+  background: var(--cui-body-bg);
+  color: var(--cui-body-color);
+  border: 1px solid var(--cui-border-color);
+  border-radius: 10px;
+}
+
+.dt-scope .dataTables_wrapper .dataTables_info{
+  color: var(--cui-body-color);
+}
+
+.dt-scope .dataTables_wrapper .page-link{
+  background: var(--cui-body-bg);
+  color: var(--cui-body-color);
+  border-color: var(--cui-border-color);
+}
+
+.dt-scope .dataTables_wrapper .page-item.active .page-link{
+  background: var(--cui-primary);
+  border-color: var(--cui-primary);
+  color: #fff;
+}
+
+/* Responsive child row */
+.dt-scope table.dataTable > tbody > tr.child{
+  background: color-mix(in srgb, var(--cui-tertiary-bg) 70%, transparent);
+}
+
+/* color-mix fallback */
+@supports not (color-mix(in srgb, #000 50%, transparent)) {
+  .dt-scope .table tbody tr:hover { background: var(--cui-tertiary-bg); }
+  .dt-scope table.dataTable > tbody > tr.child { background: var(--cui-tertiary-bg); }
+}
+
+
+/* ===============================
+   Sidebar – minimal & safe
+   (CoreUI caret fully untouched)
+   =============================== */
+
+/* Level-1: Company / Category / Branch */
+#sidebar
+.nav-group > .nav-group-items > .nav-group > .nav-link {
+  padding-left: 2.6rem !important;
+}
+
+/* Level-2: List / Create (only indent, less padding) */
+#sidebar
+.nav-group > .nav-group-items > .nav-group
+> .nav-group-items > .nav-item > .nav-link {
+  padding-left: 3.1rem !important;   /* balanced */
+}
+
+/* Remove bullet ONLY from List / Create */
+#sidebar
+.nav-group > .nav-group-items > .nav-group
+> .nav-group-items > .nav-item .nav-icon {
+  display: none !important;
+}
