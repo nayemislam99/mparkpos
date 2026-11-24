@@ -1,6 +1,6 @@
-@extends('admin.layouts.dashboard')
+﻿@extends('admin.layouts.dashboard')
 
-@section('title', __('messages.unit_types') . ' | ' . config('app.name', 'M POS'))
+@section('title', __('messages.unit_types') . ' | ' . config('app.name', 'Micro POS'))
 
 @section('content')
 <div class="row">
@@ -21,16 +21,16 @@
 
         <div class="card shadow-sm border-0 mb-4" style="border-radius: 12px;">
             {{-- Header --}}
-            <div class="card-header bg-white border-bottom py-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+            <div class="card-header bg-transparent border-bottom py-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
                 <div>
-                    <h4 class="mb-0 fw-bold text-dark">{{ __('messages.unit_types') }}</h4>
-                    <small class="text-muted fw-semibold">
+                    <h4 class="mb-0 fw-bold text-body">{{ __('messages.unit_types') }}</h4>
+                    <small class="text-body-secondary fw-semibold">
                         {{ __('messages.unit_types_count_active', ['total' => $stats['total'], 'active' => $stats['active']]) }}
                     </small>
                 </div>
                 <div class="d-flex align-items-center gap-2">
-                    <button type="button" class="btn btn-sm btn-teal text-white px-3 fw-semibold shadow-sm" onclick="alert('CSV Import/Export template ready.')">
-                        {{ __('messages.csv_import_export') }}
+                    <button type="button" class="btn btn-sm btn-teal text-white px-3 fw-semibold shadow-sm" data-bs-toggle="modal" data-bs-target="#csvUnitModal">
+                        <i class="bi bi-file-earmark-spreadsheet me-1"></i> {{ __('messages.csv_import_export') }}
                     </button>
                     @can('products.create')
                         <button type="button" class="btn btn-sm btn-primary px-3 fw-semibold shadow-sm" data-bs-toggle="modal" data-bs-target="#addUnitTypeModal">
@@ -88,27 +88,27 @@
     <div class="modal-dialog modal-dialog-centered">
         <form class="modal-content border-0 shadow" method="POST" action="{{ route('unit-types.store') }}">
             @csrf
-            <div class="modal-header border-bottom bg-light">
-                <h5 class="modal-title fw-bold" id="addUnitTypeModalLabel">
+            <div class="modal-header border-bottom bg-body-tertiary">
+                <h5 class="modal-title fw-bold text-body" id="addUnitTypeModalLabel">
                     <i class="bi bi-box-seam me-1 text-primary"></i> {{ __('messages.add_new_unit_type') }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 <div class="mb-3">
-                    <label class="form-label fw-semibold" for="unitNameInput">{{ __('messages.unit_name') }} <span class="text-danger">*</span></label>
+                    <label class="form-label fw-semibold text-body" for="unitNameInput">{{ __('messages.unit_name') }} <span class="text-danger">*</span></label>
                     <input type="text" id="unitNameInput" name="name" class="form-control" required placeholder="{{ __('messages.unit_name_placeholder') }}">
                 </div>
                 <div class="mb-3">
-                    <label class="form-label fw-semibold" for="unitCodeInput">{{ __('messages.unit_code') }}</label>
+                    <label class="form-label fw-semibold text-body" for="unitCodeInput">{{ __('messages.unit_code') }}</label>
                     <input type="text" id="unitCodeInput" name="code" class="form-control" placeholder="{{ __('messages.unit_code_placeholder') }}">
                 </div>
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" id="unitActiveSwitch" name="is_active" value="1" checked>
-                    <label class="form-check-label fw-semibold" for="unitActiveSwitch">{{ __('messages.active') }}</label>
+                    <label class="form-check-label fw-semibold text-body" for="unitActiveSwitch">{{ __('messages.active') }}</label>
                 </div>
             </div>
-            <div class="modal-footer border-top bg-light">
+            <div class="modal-footer border-top bg-body-tertiary">
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">{{ __('messages.cancel') }}</button>
                 <button type="submit" class="btn btn-primary btn-sm px-4 fw-semibold">{{ __('messages.save_unit_type') }}</button>
             </div>
@@ -122,31 +122,85 @@
         <form class="modal-content border-0 shadow" id="editUnitTypeForm" method="POST" action="">
             @csrf
             @method('PUT')
-            <div class="modal-header border-bottom bg-light">
-                <h5 class="modal-title fw-bold" id="editUnitTypeModalLabel">
+            <div class="modal-header border-bottom bg-body-tertiary">
+                <h5 class="modal-title fw-bold text-body" id="editUnitTypeModalLabel">
                     <i class="bi bi-pencil-square me-1 text-primary"></i> {{ __('messages.edit_unit_type') }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 <div class="mb-3">
-                    <label class="form-label fw-semibold" for="editUnitNameInput">{{ __('messages.unit_name') }} <span class="text-danger">*</span></label>
+                    <label class="form-label fw-semibold text-body" for="editUnitNameInput">{{ __('messages.unit_name') }} <span class="text-danger">*</span></label>
                     <input type="text" id="editUnitNameInput" name="name" class="form-control" required>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label fw-semibold" for="editUnitCodeInput">{{ __('messages.unit_code') }}</label>
+                    <label class="form-label fw-semibold text-body" for="editUnitCodeInput">{{ __('messages.unit_code') }}</label>
                     <input type="text" id="editUnitCodeInput" name="code" class="form-control">
                 </div>
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" id="editUnitActiveSwitch" name="is_active" value="1">
-                    <label class="form-check-label fw-semibold" for="editUnitActiveSwitch">{{ __('messages.active') }}</label>
+                    <label class="form-check-label fw-semibold text-body" for="editUnitActiveSwitch">{{ __('messages.active') }}</label>
                 </div>
             </div>
-            <div class="modal-footer border-top bg-light">
+            <div class="modal-footer border-top bg-body-tertiary">
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">{{ __('messages.cancel') }}</button>
                 <button type="submit" class="btn btn-teal text-white btn-sm px-4 fw-semibold">{{ __('messages.update_unit_type') }}</button>
             </div>
         </form>
+    </div>
+</div>
+
+{{-- CSV Import / Export Modal --}}
+<div class="modal fade" id="csvUnitModal" tabindex="-1" aria-labelledby="csvUnitModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-bottom bg-body-tertiary">
+                <h5 class="modal-title fw-bold text-body" id="csvUnitModalLabel">
+                    <i class="bi bi-file-earmark-spreadsheet-fill text-teal me-1"></i> {{ __('messages.csv_import_export') }} - {{ __('messages.unit_types') }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                {{-- Export Section --}}
+                <div class="p-3 mb-4 rounded-3 border bg-body-tertiary">
+                    <h6 class="fw-bold text-body mb-1">
+                        <i class="bi bi-download text-primary me-1"></i> {{ __('messages.csv_export_title') }}
+                    </h6>
+                    <p class="text-body-secondary small mb-3">{{ __('messages.csv_export_desc') }}</p>
+                    <a href="{{ route('unit-types.export.csv') }}" class="btn btn-outline-primary btn-sm fw-semibold">
+                        <i class="bi bi-file-earmark-arrow-down me-1"></i> {{ __('messages.download_csv_file') }}
+                    </a>
+                </div>
+
+                {{-- Import Section --}}
+                <div class="p-3 rounded-3 border bg-body-tertiary">
+                    <h6 class="fw-bold text-body mb-1">
+                        <i class="bi bi-upload text-teal me-1"></i> {{ __('messages.csv_import_title') }}
+                    </h6>
+                    <p class="text-body-secondary small mb-2">{{ __('messages.csv_import_desc') }}</p>
+                    <div class="mb-3">
+                        <a href="{{ route('unit-types.sample.csv') }}" class="btn btn-link btn-sm p-0 text-decoration-none">
+                            <i class="bi bi-file-earmark-text me-1"></i> {{ __('messages.download_sample_template') }}
+                        </a>
+                    </div>
+                    <form action="{{ route('unit-types.import.csv') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-body small" for="unitCsvFile">
+                                {{ __('messages.choose_csv_file') }} <span class="text-danger">*</span>
+                            </label>
+                            <input type="file" name="csv_file" id="unitCsvFile" accept=".csv" required class="form-control form-control-sm">
+                        </div>
+                        <button type="submit" class="btn btn-teal text-white btn-sm px-4 fw-semibold shadow-sm">
+                            <i class="bi bi-upload me-1"></i> {{ __('messages.upload_and_import') }}
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer border-top bg-body-tertiary">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">{{ __('messages.cancel') }}</button>
+            </div>
+        </div>
     </div>
 </div>
 @endsection

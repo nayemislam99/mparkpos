@@ -1,6 +1,6 @@
-@extends('admin.layouts.dashboard')
+﻿@extends('admin.layouts.dashboard')
 
-@section('title', 'Branch User Role & Permissions | ' . config('app.name', 'M POS'))
+@section('title', 'Branch User Role & Permissions | ' . config('app.name', 'Micro POS'))
 
 @section('content')
     <div class="row">

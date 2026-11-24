@@ -8,12 +8,18 @@
       </svg>
     </button>
 
-    <div class="d-none d-md-flex align-items-center ms-2">
-      <span class="badge bg-secondary-subtle text-secondary border px-2 py-1 small">
-        <i class="bi bi-shop me-1"></i>
-        {{ auth()->user()->branch->name ?? __('messages.all_branches') }}
-      </span>
-    </div>
+    {{-- POS Terminal Sell Button (Header Left) --}}
+    @can('sales.create')
+      <div class="d-flex align-items-center ms-2">
+        <a class="btn btn-brand-sell btn-sm d-flex align-items-center gap-1.5 fw-bold px-3 py-1 shadow-sm"
+           href="{{ route('pos.terminal') }}"
+           aria-label="{{ __('messages.sell') }}"
+           title="{{ __('messages.sell') }}">
+          <i class="bi bi-cart-fill"></i>
+          <span>{{ __('messages.sell') }}</span>
+        </a>
+      </div>
+    @endcan
 
     <ul class="header-nav ms-auto align-items-center">
       {{-- Live clock --}}
@@ -21,19 +27,6 @@
         <i class="bi bi-clock me-1"></i>
         <span id="pos-header-clock" class="fw-semibold font-monospace">--:--:--</span>
       </li>
-
-      {{-- Quick Sell button --}}
-      @can('sales.create')
-        <li class="nav-item me-2">
-          <a class="btn btn-warning btn-sm d-flex align-items-center gap-1 text-dark fw-bold px-3 py-1 shadow-sm"
-             href="{{ route('pos.terminal') }}"
-             aria-label="{{ __('messages.sell') }}"
-             title="{{ __('messages.sell') }}">
-            <i class="bi bi-cart-fill"></i>
-            <span>{{ __('messages.sell') }}</span>
-          </a>
-        </li>
-      @endcan
 
       {{-- Language toggle --}}
       <li class="nav-item dropdown me-2">
@@ -94,27 +87,45 @@
 
       <li class="nav-item py-1"><div class="vr h-100 mx-2 text-body text-opacity-75"></div></li>
 
-      {{-- Avatar --}}
+      {{-- Avatar & User Menu --}}
       <li class="nav-item dropdown">
-        <a class="nav-link py-0 pe-0" data-coreui-toggle="dropdown" href="#" role="button">
+        <a class="nav-link py-0 pe-0" data-coreui-toggle="dropdown" href="#" role="button" aria-expanded="false">
           <div class="avatar avatar-md">
             <img class="avatar-img" src="{{ asset('admin/assets/img/avatars/8.jpg') }}" alt="{{ auth()->user()->name }}">
           </div>
         </a>
 
-        <div class="dropdown-menu dropdown-menu-end pt-0">
-          <div class="dropdown-header bg-body-tertiary text-body-secondary fw-semibold rounded-top mb-2">
-            {{ auth()->user()->name }}<br>
-            <span class="fw-normal">{{ auth()->user()->email }}</span>
+        <div class="dropdown-menu dropdown-menu-end pt-0 shadow-sm border" style="min-width: 220px; border-radius: 10px;">
+          <div class="dropdown-header bg-body-tertiary text-body-secondary fw-semibold rounded-top mb-1 py-2 px-3">
+            <div class="fw-bold text-body fs-6">{{ auth()->user()->name }}</div>
+            <small class="text-body-secondary">{{ config("access.roles." . auth()->user()->type . ".label") ?? ucfirst(str_replace('_', ' ', auth()->user()->type ?? 'Admin')) }}</small>
           </div>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item"
+          
+          <a class="dropdown-item d-flex align-items-center py-2" href="{{ route('profile.index') }}">
+            <i class="bi bi-person me-2 text-primary fs-6"></i>
+            <span>{{ __('messages.profile') }}</span>
+          </a>
+
+          <a class="dropdown-item d-flex align-items-center py-2" href="{{ route('profile.password') }}">
+            <i class="bi bi-key me-2 text-warning fs-6"></i>
+            <span>{{ __('messages.change_password') }}</span>
+          </a>
+
+          <a class="dropdown-item d-flex align-items-center py-2" href="#" onclick="event.preventDefault(); document.getElementById('clear-cache-form').submit();">
+            <i class="bi bi-arrow-repeat me-2 text-success fs-6"></i>
+            <span>{{ __('messages.clear_cache') }}</span>
+          </a>
+          <form id="clear-cache-form" action="{{ route('profile.clear-cache') }}" method="POST" class="d-none">
+            @csrf
+          </form>
+
+          <div class="dropdown-divider my-1"></div>
+
+          <a class="dropdown-item d-flex align-items-center py-2 text-danger"
             href="#"
             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-              <svg class="icon me-2">
-                  <use xlink:href="{{ asset('admin/vendors/@coreui/icons/svg/free.svg#cil-account-logout') }}"></use>
-              </svg>
-              {{ __('messages.logout') }}
+              <i class="bi bi-box-arrow-right me-2 text-danger fs-6"></i>
+              <span>{{ __('messages.logout') }}</span>
           </a>
 
           <form id="logout-form"

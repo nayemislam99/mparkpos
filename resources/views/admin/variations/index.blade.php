@@ -1,6 +1,6 @@
-@extends('admin.layouts.dashboard')
+﻿@extends('admin.layouts.dashboard')
 
-@section('title', 'Variations | ' . config('app.name', 'M POS'))
+@section('title', 'Variations | ' . config('app.name', 'Micro POS'))
 
 @section('content')
 <div class="row">
@@ -21,10 +21,10 @@
 
         <div class="card shadow-sm border-0 mb-4" style="border-radius: 12px;">
             {{-- Header matching Screenshot 11 --}}
-            <div class="card-header bg-white border-bottom py-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+            <div class="card-header bg-transparent border-bottom py-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
                 <div>
-                    <h4 class="mb-0 fw-bold text-dark">Variations</h4>
-                    <small class="text-muted fw-semibold">
+                    <h4 class="mb-0 fw-bold text-body">Variations</h4>
+                    <small class="text-body-secondary fw-semibold">
                         {{ $stats['total'] }} variations, {{ $stats['total_items'] }} items
                     </small>
                 </div>
@@ -38,20 +38,20 @@
             </div>
 
             {{-- Tabs & Search bar --}}
-            <div class="card-body pb-0 pt-3 border-bottom bg-light">
+            <div class="card-body pb-0 pt-3 border-bottom bg-body-tertiary">
                 <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
                     <div class="d-flex flex-wrap gap-2">
                         <a href="{{ route('variations.index') }}"
                            class="btn btn-sm {{ $status === null || $status === '' ? 'btn-primary' : 'btn-outline-secondary' }} px-3 py-1 fw-semibold">
-                            All <span class="badge bg-white text-dark ms-1">{{ $stats['total'] }}</span>
+                            All <span class="badge bg-body-tertiary text-body ms-1">{{ $stats['total'] }}</span>
                         </a>
                         <a href="{{ route('variations.index', ['status' => '1', 'q' => $search]) }}"
                            class="btn btn-sm {{ $status === '1' ? 'btn-primary' : 'btn-outline-secondary' }} px-3 py-1 fw-semibold">
-                            Active <span class="badge bg-white text-dark ms-1">{{ $stats['active'] }}</span>
+                            Active <span class="badge bg-body-tertiary text-body ms-1">{{ $stats['active'] }}</span>
                         </a>
                         <a href="{{ route('variations.index', ['status' => '0', 'q' => $search]) }}"
                            class="btn btn-sm {{ $status === '0' ? 'btn-primary' : 'btn-outline-secondary' }} px-3 py-1 fw-semibold">
-                            Inactive <span class="badge bg-white text-dark ms-1">{{ $stats['inactive'] }}</span>
+                            Inactive <span class="badge bg-body-tertiary text-body ms-1">{{ $stats['inactive'] }}</span>
                         </a>
                     </div>
                     <div style="min-width: 250px;">
@@ -74,7 +74,7 @@
             </div>
 
             {{-- Variations Card Grid matching Screenshot 11 --}}
-            <div class="card-body p-4 bg-light">
+            <div class="card-body p-4 bg-body-tertiary">
                 <div class="row g-4">
                     @forelse($variations as $v)
                         @php
@@ -82,15 +82,15 @@
                         @endphp
                         <div class="col-12 col-md-6 col-lg-4">
                             <div class="card h-100 border-0 shadow-sm" style="border-radius: 10px;">
-                                <div class="card-header bg-white border-bottom py-3 d-flex align-items-center justify-content-between">
+                                <div class="card-header bg-transparent border-bottom py-3 d-flex align-items-center justify-content-between">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="mb-0 fw-bold text-dark">{{ $v->name }}</h5>
+                                        <h5 class="mb-0 fw-bold text-body">{{ $v->name }}</h5>
                                         @if($v->is_active)
                                             <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">Active</span>
                                         @else
                                             <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill">Inactive</span>
                                         @endif
-                                        <small class="text-muted fw-semibold">({{ count($items) }} items)</small>
+                                        <small class="text-body-secondary fw-semibold">({{ count($items) }} items)</small>
                                     </div>
                                     <button type="button" class="btn btn-sm btn-teal text-white edit-var-btn"
                                             data-id="{{ $v->id }}"
@@ -104,7 +104,7 @@
                                 <div class="card-body p-3">
                                     <div class="d-flex flex-wrap gap-2 align-items-center">
                                         @forelse($items as $item)
-                                            <span class="badge bg-light text-dark border px-3 py-2 fs-6 fw-normal rounded-3">
+                                            <span class="badge bg-body-tertiary text-body border px-3 py-2 fs-6 fw-normal rounded-3">
                                                 {{ $item }}
                                             </span>
                                         @empty
@@ -144,26 +144,28 @@
     <div class="modal-dialog modal-dialog-centered">
         <form class="modal-content border-0 shadow" method="POST" action="{{ route('variations.store') }}">
             @csrf
-            <div class="modal-header border-bottom bg-light">
-                <h5 class="modal-title fw-bold" id="addVariationModalLabel">Add Variation</h5>
+            <div class="modal-header border-bottom bg-body-tertiary">
+                <h5 class="modal-title fw-bold text-body" id="addVariationModalLabel">
+                    <i class="bi bi-diagram-3-fill me-1 text-primary"></i> Add Variation
+                </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 <div class="mb-3">
-                    <label class="form-label fw-semibold" for="varNameInput">Variation Name <span class="text-danger">*</span></label>
+                    <label class="form-label fw-semibold text-body" for="varNameInput">Variation Name <span class="text-danger">*</span></label>
                     <input type="text" id="varNameInput" name="name" class="form-control" required placeholder="e.g. Size, Color, Capacity">
                 </div>
                 <div class="mb-3">
-                    <label class="form-label fw-semibold" for="varItemsInput">Items (comma separated)</label>
+                    <label class="form-label fw-semibold text-body" for="varItemsInput">Items (comma separated)</label>
                     <textarea id="varItemsInput" name="items_input" class="form-control" rows="3" placeholder="e.g. S, M, L, XL, XXL or Red, Blue, Black"></textarea>
-                    <small class="text-muted">Separate multiple values by comma.</small>
+                    <small class="text-body-secondary">Separate multiple values by comma.</small>
                 </div>
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" id="varActiveSwitch" name="is_active" value="1" checked>
-                    <label class="form-check-label fw-semibold" for="varActiveSwitch">Active</label>
+                    <label class="form-check-label fw-semibold text-body" for="varActiveSwitch">Active</label>
                 </div>
             </div>
-            <div class="modal-footer border-top bg-light">
+            <div class="modal-footer border-top bg-body-tertiary">
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
                 <button type="submit" class="btn btn-primary btn-sm px-4 fw-semibold">Save Variation</button>
             </div>
@@ -177,26 +179,26 @@
         <form class="modal-content border-0 shadow" id="editVariationForm" method="POST" action="">
             @csrf
             @method('PUT')
-            <div class="modal-header border-bottom bg-light">
-                <h5 class="modal-title fw-bold" id="editVariationModalLabel">Edit Variation</h5>
+            <div class="modal-header border-bottom bg-body-tertiary">
+                <h5 class="modal-title fw-bold text-body" id="editVariationModalLabel">Edit Variation</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 <div class="mb-3">
-                    <label class="form-label fw-semibold" for="editVarNameInput">Variation Name <span class="text-danger">*</span></label>
+                    <label class="form-label fw-semibold text-body" for="editVarNameInput">Variation Name <span class="text-danger">*</span></label>
                     <input type="text" id="editVarNameInput" name="name" class="form-control" required>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label fw-semibold" for="editVarItemsInput">Items (comma separated)</label>
+                    <label class="form-label fw-semibold text-body" for="editVarItemsInput">Items (comma separated)</label>
                     <textarea id="editVarItemsInput" name="items_input" class="form-control" rows="3"></textarea>
-                    <small class="text-muted">Separate multiple values by comma.</small>
+                    <small class="text-body-secondary">Separate multiple values by comma.</small>
                 </div>
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" id="editVarActiveSwitch" name="is_active" value="1">
-                    <label class="form-check-label fw-semibold" for="editVarActiveSwitch">Active</label>
+                    <label class="form-check-label fw-semibold text-body" for="editVarActiveSwitch">Active</label>
                 </div>
             </div>
-            <div class="modal-footer border-top bg-light">
+            <div class="modal-footer border-top bg-body-tertiary">
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
                 <button type="submit" class="btn btn-teal text-white btn-sm px-4 fw-semibold">Update Variation</button>
             </div>
@@ -209,15 +211,15 @@
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <form class="modal-content border-0 shadow" id="addItemForm" method="POST" action="">
             @csrf
-            <div class="modal-header border-bottom bg-light">
-                <h6 class="modal-title fw-bold" id="addItemModalTitle">Add Item</h6>
+            <div class="modal-header border-bottom bg-body-tertiary">
+                <h6 class="modal-title fw-bold text-body" id="addItemModalTitle">Add Item</h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-3">
-                <label class="form-label fw-semibold small" for="singleItemInput">Item Value <span class="text-danger">*</span></label>
+                <label class="form-label fw-semibold small text-body" for="singleItemInput">Item Value <span class="text-danger">*</span></label>
                 <input type="text" id="singleItemInput" name="item" class="form-control" required placeholder="e.g. 44, XL, Golden">
             </div>
-            <div class="modal-footer border-top bg-light p-2">
+            <div class="modal-footer border-top bg-body-tertiary p-2">
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
                 <button type="submit" class="btn btn-primary btn-sm px-3 fw-semibold">Add</button>
             </div>

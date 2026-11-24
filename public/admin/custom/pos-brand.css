@@ -1,5 +1,5 @@
 /* ==========================================================================
-   M POS Official Brand Theme (Based on mpos.png: #d20101 & #191715)
+   Micro POS Official Brand Theme (Based on mpos.png: #d20101 & #191715)
    ========================================================================== */
 
 :root,
@@ -10,7 +10,7 @@
     --pos-brand-active: #9b0000;
     --pos-brand-dark: #191715;
 
-    /* Override CoreUI primary color to match official M POS logo */
+    /* Override CoreUI primary color to match official Micro POS logo */
     --cui-primary: #d20101;
     --cui-primary-rgb: 210, 1, 1;
     --cui-primary-text-emphasis: #750000;
@@ -150,3 +150,106 @@ table.dataTable.collapsed > tbody > tr > td.dtr-control:before {
 .dt-export-group {
     display: none !important;
 }
+
+/* ==========================================================================
+   Dark Mode Universal Overrides & Consistency
+   ========================================================================== */
+[data-coreui-theme="dark"] .card-header.bg-white,
+[data-coreui-theme="dark"] .card-header.bg-light,
+[data-coreui-theme="dark"] .card.bg-white {
+    background-color: var(--cui-card-bg) !important;
+    color: var(--cui-body-color) !important;
+    border-color: var(--cui-border-color) !important;
+}
+
+[data-coreui-theme="dark"] .card-body.bg-light,
+[data-coreui-theme="dark"] .bg-light {
+    background-color: var(--cui-tertiary-bg) !important;
+    color: var(--cui-body-color) !important;
+}
+
+[data-coreui-theme="dark"] .modal-header.bg-light,
+[data-coreui-theme="dark"] .modal-footer.bg-light {
+    background-color: var(--cui-tertiary-bg) !important;
+    color: var(--cui-body-color) !important;
+    border-color: var(--cui-border-color) !important;
+}
+
+[data-coreui-theme="dark"] .text-dark {
+    color: var(--cui-body-color) !important;
+}
+
+[data-coreui-theme="dark"] .badge.bg-white.text-dark,
+[data-coreui-theme="dark"] .badge.bg-light.text-dark {
+    background-color: var(--cui-tertiary-bg) !important;
+    color: var(--cui-body-color) !important;
+    border: 1px solid var(--cui-border-color) !important;
+}
+
+[data-coreui-theme="dark"] .js-brand-tab.btn-dark.active,
+[data-coreui-theme="dark"] .js-category-tab.btn-dark.active,
+[data-coreui-theme="dark"] .js-unit-tab.btn-dark.active,
+[data-coreui-theme="dark"] .js-branch-tab.btn-dark.active {
+    background-color: var(--pos-brand-primary) !important;
+    border-color: var(--pos-brand-primary) !important;
+    color: #fff !important;
+}
+
+[data-coreui-theme="dark"] .js-brand-tab.btn-dark.active .badge,
+[data-coreui-theme="dark"] .js-category-tab.btn-dark.active .badge,
+[data-coreui-theme="dark"] .js-unit-tab.btn-dark.active .badge,
+[data-coreui-theme="dark"] .js-branch-tab.btn-dark.active .badge {
+    background-color: rgba(255, 255, 255, 0.25) !important;
+    color: #fff !important;
+    border: none !important;
+}
+
+/* User Profile Dropdown Styling */
+.header .dropdown-menu {
+    border-radius: 10px;
+    overflow: hidden;
+}
+.header .dropdown-menu .dropdown-item {
+    font-size: 0.88rem;
+    font-weight: 500;
+    transition: background-color 0.15s ease-in-out;
+}
+.header .dropdown-menu .dropdown-item:hover {
+    background-color: rgba(210, 1, 1, 0.08);
+}
+[data-coreui-theme="dark"] .header .dropdown-menu .dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* POS Terminal Sell Button in Header */
+.btn-brand-sell {
+    background-color: #d20101 !important;
+    border-color: #d20101 !important;
+    color: #ffffff !important;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    padding: 0.28rem 0.85rem;
+    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, transform 0.1s ease-in-out;
+}
+.btn-brand-sell:hover {
+    background-color: #b50000 !important;
+    border-color: #b50000 !important;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+}
+.btn-brand-sell:active {
+    background-color: #9b0000 !important;
+    border-color: #9b0000 !important;
+    color: #ffffff !important;
+}
+[data-coreui-theme="dark"] .btn-brand-sell {
+    background-color: #e62323 !important;
+    border-color: #e62323 !important;
+}
+[data-coreui-theme="dark"] .btn-brand-sell:hover {
+    background-color: #f03e3e !important;
+    border-color: #f03e3e !important;
+}
+
+
+

@@ -11,6 +11,7 @@ use App\Models\ProductVariation;
 use App\Models\UnitType;
 use App\Models\User;
 use App\Models\Variation;
+use App\Services\Csv\CsvService;
 use App\Services\Pos\TenantContext;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -18,11 +19,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ProductController extends Controller
 {
     public function __construct(
         private TenantContext $tenant,
+        private CsvService $csvService,
     ) {}
 
     public function index(Request $request)
@@ -289,5 +292,199 @@ class ProductController extends Controller
         return response()->json([
             'barcode' => (string) rand(100000000000, 999999999999),
         ]);
+    }
+
+    public function uploadCsvView(Request $request)
+    {
+        /** @var User $user */
+        $user = $request->user();
+        abort_unless($user->can('products.create'), 403);
+
+        $company = $this->tenant->company($user);
+        $categories = ProductCategory::where('company_id', $company->id)->where('is_active', true)->orderBy('name')->get();
+        $brands = Brand::where('company_id', $company->id)->where('is_active', true)->orderBy('name')->get();
+        $unitTypes = UnitType::where('company_id', $company->id)->where('is_active', true)->orderBy('name')->get();
+
+        return view('admin.products.upload-csv', compact('company', 'categories', 'brands', 'unitTypes'));
+    }
+
+    public function exportCsv(Request $request): StreamedResponse
+    {
+        /** @var User $user */
+        $user = $request->user();
+        abort_unless($user->can('products.view'), 403);
+
+        $company = $this->tenant->company($user);
+        $products = Product::where('company_id', $company->id)
+            ->with(['category', 'brandModel', 'unitType'])
+            ->orderBy('name')
+            ->get();
+
+        $headers = [
+            'ID', 'Product Title', 'Barcode', 'SKU', 'Brand',
+            'Category', 'Unit', 'Purchase Price', 'Selling Price',
+            'Alert Quantity', 'Status', 'Created At'
+        ];
+
+        $rows = [];
+        foreach ($products as $p) {
+            $rows[] = [
+                $p->id,
+                $p->name,
+                $p->barcode,
+                $p->sku,
+                $p->brandModel?->name ?: ($p->brand ?: ''),
+                $p->category?->name ?: '',
+                $p->unitType?->name ?: '',
+                $p->cost_price,
+                $p->sale_price,
+                $p->alert_quantity,
+                $p->is_active ? 'Active' : 'Inactive',
+                $p->created_at?->format('Y-m-d H:i:s'),
+            ];
+        }
+
+        return $this->csvService->export('products_' . date('Y_m_d_His') . '.csv', $headers, $rows);
+    }
+
+    public function sampleCsv(): StreamedResponse
+    {
+        $headers = [
+            'name', 'barcode', 'sku', 'brand_name', 'category_name',
+            'unit_name', 'cost_price', 'sale_price', 'alert_quantity',
+            'is_active', 'description'
+        ];
+
+        $rows = [
+            [
+                'Yamaha R15 V4 Helmet', '8901234567890', 'HELM-001', 'Yamaha', 'Helmets',
+                'Piece', '2500.00', '3200.00', '5', '1', 'High quality premium helmet'
+            ],
+            [
+                'Honda Genuine Engine Oil', '8901234567891', 'OIL-002', 'Honda', 'Lubricants',
+                'Liter', '650.00', '800.00', '10', '1', 'Synthetic 4T engine oil'
+            ],
+        ];
+
+        return $this->csvService->export('products_sample_template.csv', $headers, $rows);
+    }
+
+    public function importCsv(Request $request): RedirectResponse
+    {
+        /** @var User $user */
+        $user = $request->user();
+        abort_unless($user->can('products.create'), 403);
+
+        $request->validate([
+            'csv_file' => ['required', 'file', 'mimes:csv,txt', 'max:10240'],
+        ]);
+
+        $company = $this->tenant->company($user);
+        $records = $this->csvService->parse($request->file('csv_file'));
+
+        if (empty($records)) {
+            return redirect()->back()->with('error', __('messages.csv_no_valid_rows'));
+        }
+
+        $created = 0;
+        $skipped = 0;
+
+        foreach ($records as $row) {
+            $name = trim($row['name'] ?? $row['product_name'] ?? $row['title'] ?? '');
+            if ($name === '') {
+                $skipped++;
+                continue;
+            }
+
+            // Resolve Brand
+            $brandId = null;
+            $brandName = trim($row['brand_name'] ?? $row['brand'] ?? '');
+            if ($brandName !== '') {
+                $brand = Brand::firstOrCreate([
+                    'company_id' => $company->id,
+                    'name' => $brandName,
+                ], [
+                    'is_active' => true,
+                ]);
+                $brandId = $brand->id;
+            }
+
+            // Resolve Category
+            $categoryId = null;
+            $catName = trim($row['category_name'] ?? $row['category'] ?? '');
+            if ($catName !== '') {
+                $category = ProductCategory::firstOrCreate([
+                    'company_id' => $company->id,
+                    'name' => $catName,
+                ], [
+                    'is_active' => true,
+                ]);
+                $categoryId = $category->id;
+            }
+
+            // Resolve Unit
+            $unitId = null;
+            $unitName = trim($row['unit_name'] ?? $row['unit'] ?? '');
+            if ($unitName !== '') {
+                $unit = UnitType::firstOrCreate([
+                    'company_id' => $company->id,
+                    'name' => $unitName,
+                ], [
+                    'is_active' => true,
+                ]);
+                $unitId = $unit->id;
+            }
+
+            // Prices
+            $costPrice = floatval(trim($row['cost_price'] ?? $row['purchase_price'] ?? '0'));
+            $salePrice = floatval(trim($row['sale_price'] ?? $row['selling_price'] ?? '0'));
+            $alertQty = floatval(trim($row['alert_quantity'] ?? $row['alert_qty'] ?? '0'));
+
+            // Barcode & SKU uniqueness check within company
+            $barcode = trim($row['barcode'] ?? '');
+            if ($barcode !== '') {
+                if (Product::where('company_id', $company->id)->where('barcode', $barcode)->exists()) {
+                    $barcode = (string) rand(100000000000, 999999999999);
+                }
+            } else {
+                $barcode = (string) rand(100000000000, 999999999999);
+            }
+
+            $sku = trim($row['sku'] ?? '');
+            if ($sku !== '') {
+                if (Product::where('company_id', $company->id)->where('sku', $sku)->exists()) {
+                    $sku = 'SKU-' . strtoupper(Str::random(6));
+                }
+            } else {
+                $sku = 'SKU-' . strtoupper(Str::random(6));
+            }
+
+            $isActive = !isset($row['is_active']) || in_array(strtolower(trim((string)$row['is_active'])), ['1', 'true', 'active', 'yes'], true);
+            $description = trim($row['description'] ?? '');
+
+            Product::create([
+                'company_id' => $company->id,
+                'name' => $name,
+                'brand' => $brandName ?: null,
+                'brand_id' => $brandId,
+                'category_id' => $categoryId,
+                'unit_id' => $unitId,
+                'cost_price' => $costPrice,
+                'sale_price' => $salePrice,
+                'alert_quantity' => $alertQty,
+                'sku' => $sku,
+                'barcode' => $barcode,
+                'is_active' => $isActive,
+                'description' => $description ?: null,
+                'product_type' => 'simple',
+            ]);
+
+            $created++;
+        }
+
+        return redirect()->route('products.index')->with('success', __('messages.csv_import_success', [
+            'created' => $created,
+            'skipped' => $skipped,
+        ]));
     }
 }

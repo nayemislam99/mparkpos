@@ -1,6 +1,6 @@
-@extends('admin.layouts.dashboard')
+﻿@extends('admin.layouts.dashboard')
 
-@section('title', __('messages.user_management') . ' | ' . config('app.name', 'M POS'))
+@section('title', __('messages.user_management') . ' | ' . config('app.name', 'Micro POS'))
 
 @section('content')
 <div class="row">
@@ -20,10 +20,10 @@
         @endif
 
         <div class="card shadow-sm border-0 mb-4" style="border-radius: 12px;">
-            <div class="card-header bg-white border-bottom py-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+            <div class="card-header bg-transparent border-bottom py-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
                 <div>
-                    <h4 class="mb-0 fw-bold text-dark">{{ __('messages.users') }}</h4>
-                    <small class="text-muted fw-semibold">
+                    <h4 class="mb-0 fw-bold text-body">{{ __('messages.users') }}</h4>
+                    <small class="text-body-secondary fw-semibold">
                         Manage your store team and access &bull; {{ $stats['total'] }} {{ __('messages.users') }} &bull; <span class="text-success">{{ $stats['active'] }} {{ __('messages.active') }}</span>
                     </small>
                 </div>
@@ -38,7 +38,7 @@
 
             <div class="card-body px-4 pb-4 pt-3">
                 <div class="dt-scope">
-                    <div id="usersFilters" class="dt-filter-card mb-3 p-3 rounded-3 bg-light border">
+                    <div id="usersFilters" class="dt-filter-card mb-3 p-3 rounded-3 border">
                         <div class="row g-3 align-items-end">
                             <div class="col-12 col-md-3">
                                 <label class="form-label fw-semibold small mb-1" for="userRole">{{ __('messages.table_role') }}</label>

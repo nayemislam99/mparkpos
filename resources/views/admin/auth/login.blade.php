@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#191715">
-    <title>Sign in | {{ config('app.name', 'M POS') }}</title>
+    <title>Sign in | {{ config('app.name', 'Micro POS') }}</title>
     <style>
         :root {
             color-scheme: light;
@@ -152,9 +152,9 @@
 </head>
 <body>
     <main class="login-shell">
-        <section class="brand-panel" aria-label="M POS">
+        <section class="brand-panel" aria-label="Micro POS">
             <div class="brand">
-                <img src="{{ asset('admin/assets/img/mpos.png') }}" alt="{{ config('app.name', 'M POS') }}">
+                <img src="{{ asset('admin/assets/img/mpos.png') }}" alt="{{ config('app.name', 'Micro POS') }}">
             </div>
             <div class="brand-copy">
                 <span class="eyebrow">Point of sale</span>
@@ -167,7 +167,7 @@
         <section class="form-panel">
             <div class="form-content">
                 <h2>Welcome back</h2>
-                <p class="intro">Sign in to continue to your M POS workspace.</p>
+                <p class="intro">Sign in to continue to your Micro POS workspace.</p>
 
                 <form method="POST" action="{{ route('auth.login.submit') }}">
                     @csrf

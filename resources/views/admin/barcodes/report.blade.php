@@ -1,6 +1,6 @@
-@extends('admin.layouts.dashboard')
+﻿@extends('admin.layouts.dashboard')
 
-@section('title', 'Barcode Print Report | ' . config('app.name', 'M POS'))
+@section('title', 'Barcode Print Report | ' . config('app.name', 'Micro POS'))
 
 @section('content')
 <div class="row">
@@ -9,7 +9,7 @@
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4">
             <div class="d-flex align-items-center gap-2">
                 <i class="bi bi-upc-scan fs-3 text-primary"></i>
-                <h4 class="mb-0 fw-bold text-dark">Barcode Print Report</h4>
+                <h4 class="mb-0 fw-bold text-body">Barcode Print Report</h4>
             </div>
             <div class="d-flex align-items-center gap-2">
                 <a href="{{ route('barcodes.print') }}" class="btn btn-sm btn-primary px-3 fw-semibold shadow-sm">
@@ -23,7 +23,7 @@
 
         {{-- Filters Card matching Screenshot 10 --}}
         <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
-            <div class="card-body p-4 bg-light rounded-3">
+            <div class="card-body p-4 bg-body-tertiary rounded-3">
                 <form action="{{ route('barcodes.report') }}" method="GET" class="row g-3 align-items-end">
                     <div class="col-12 col-sm-6 col-md-2">
                         <label class="form-label small fw-semibold" for="fromDate">From Date</label>

@@ -225,7 +225,9 @@ class ShopBranchAndLocalizationTest extends TestCase
             ->assertOk()
             ->assertSee('Recent sales')
             ->assertSee("TODAY'S SALES")
-            ->assertSee('Branch');
+            ->assertSee('Branch')
+            ->assertSee('Business accounting at your fingertips')
+            ->assertDontSee('ব্যবসার হিসাব, এখন হাতের মুঠোয়');
     }
 
     public function test_dashboard_displays_all_15_stat_cards(): void

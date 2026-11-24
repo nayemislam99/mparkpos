@@ -4,16 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\UnitType;
 use App\Models\User;
+use App\Services\Csv\CsvService;
 use App\Services\Pos\TenantContext;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class UnitTypeController extends Controller
 {
     public function __construct(
         private TenantContext $tenant,
+        private CsvService $csvService,
     ) {}
 
     public function index(Request $request)
@@ -164,5 +167,98 @@ class UnitTypeController extends Controller
         $unitType->delete();
 
         return redirect()->route('unit-types.index')->with('success', 'Unit type deleted successfully.');
+    }
+
+    public function exportCsv(Request $request): StreamedResponse
+    {
+        /** @var User $user */
+        $user = $request->user();
+        abort_unless($user->can('products.view') || $user->can('units.view'), 403);
+
+        $company = $this->tenant->company($user);
+        $units = UnitType::where('company_id', $company->id)
+            ->withCount('products')
+            ->orderBy('name')
+            ->get();
+
+        $headers = ['ID', 'Unit Name', 'Unit Code', 'Status', 'Products Count', 'Created At'];
+        $rows = [];
+        foreach ($units as $u) {
+            $rows[] = [
+                $u->id,
+                $u->name,
+                $u->code ?? '',
+                $u->is_active ? 'Active' : 'Inactive',
+                $u->products_count,
+                $u->created_at?->format('Y-m-d H:i:s'),
+            ];
+        }
+
+        return $this->csvService->export('unit_types_' . date('Y_m_d_His') . '.csv', $headers, $rows);
+    }
+
+    public function sampleCsv(): StreamedResponse
+    {
+        $headers = ['name', 'code', 'is_active'];
+        $rows = [
+            ['Piece', 'pcs', '1'],
+            ['Kilogram', 'kg', '1'],
+            ['Box', 'box', '1'],
+            ['Liter', 'ltr', '1'],
+        ];
+
+        return $this->csvService->export('unit_types_sample_template.csv', $headers, $rows);
+    }
+
+    public function importCsv(Request $request): RedirectResponse
+    {
+        /** @var User $user */
+        $user = $request->user();
+        abort_unless($user->can('products.create') || $user->can('units.create'), 403);
+
+        $request->validate([
+            'csv_file' => ['required', 'file', 'mimes:csv,txt', 'max:5120'],
+        ]);
+
+        $company = $this->tenant->company($user);
+        $records = $this->csvService->parse($request->file('csv_file'));
+
+        if (empty($records)) {
+            return redirect()->back()->with('error', __('messages.csv_no_valid_rows'));
+        }
+
+        $created = 0;
+        $skipped = 0;
+
+        foreach ($records as $row) {
+            $name = trim($row['name'] ?? $row['unit_name'] ?? $row['unit'] ?? '');
+            if ($name === '') {
+                $skipped++;
+                continue;
+            }
+
+            $exists = UnitType::where('company_id', $company->id)->where('name', $name)->exists();
+            if ($exists) {
+                $skipped++;
+                continue;
+            }
+
+            $code = trim($row['code'] ?? $row['unit_code'] ?? '');
+            $isActive = !isset($row['is_active']) || in_array(strtolower(trim((string)$row['is_active'])), ['1', 'true', 'active', 'yes'], true);
+
+            UnitType::create([
+                'company_id' => $company->id,
+                'name' => $name,
+                'code' => $code !== '' ? $code : null,
+                'is_active' => $isActive,
+            ]);
+
+            $created++;
+        }
+
+        return redirect()->route('unit-types.index')->with('success', __('messages.csv_import_success', [
+            'created' => $created,
+            'skipped' => $skipped,
+        ]));
     }
 }

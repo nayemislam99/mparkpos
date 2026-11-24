@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
@@ -17,12 +18,19 @@ class Customer extends Model
         'name',
         'phone',
         'email',
+        'nid',
         'address',
+        'address_line_2',
+        'city',
+        'customer_group',
+        'customer_type',
         'notes',
         'advance_balance',
         'due_limit',
         'opening_balance',
         'is_active',
+        'created_by',
+        'updated_by',
     ];
 
     protected $casts = [
@@ -40,6 +48,16 @@ class Customer extends Model
     public function branch(): BelongsTo
     {
         return $this->belongsTo(Branch::class);
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(CustomerPayment::class);
+    }
+
+    public function sales(): HasMany
+    {
+        return $this->hasMany(Sale::class);
     }
 
     public function getOutstandingDueAttribute(): float

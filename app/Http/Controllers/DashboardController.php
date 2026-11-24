@@ -99,11 +99,20 @@ class DashboardController extends Controller
             ];
         }
 
+        $customerStats = [
+            'total' => Customer::where('company_id', $company->id)->count(),
+            'active' => Customer::where('company_id', $company->id)->where('is_active', true)->count(),
+            'with_due' => Customer::where('company_id', $company->id)->where('opening_balance', '>', 0)->count(),
+            'total_due' => (float) Customer::where('company_id', $company->id)->sum('opening_balance'),
+            'total_advance' => (float) Customer::where('company_id', $company->id)->sum('advance_balance'),
+        ];
+
         if ($request->wantsJson()) {
             return response()->json([
                 'metrics' => $metrics,
                 'recent_sales' => $recentSales,
                 'low_stock' => $lowStock,
+                'customer_stats' => $customerStats,
             ]);
         }
 
@@ -114,7 +123,8 @@ class DashboardController extends Controller
             'selectedDate',
             'metrics',
             'recentSales',
-            'lowStock'
+            'lowStock',
+            'customerStats'
         ));
     }
 

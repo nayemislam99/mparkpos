@@ -198,10 +198,10 @@ return [
                     'label' => 'Customers',
                     'icon' => 'cil-user',
                     'permission' => 'customers.view',
-                    'active_routes' => ['pos.*'],
+                    'active_routes' => ['customers.*'],
                     'children' => [
-                        ['label' => 'Customer search', 'permission' => 'customers.view', 'soon' => true],
-                        ['label' => 'Add customer', 'permission' => 'customers.create', 'soon' => true],
+                        ['label' => 'Add customer', 'permission' => 'customers.create', 'route' => 'customers.create'],
+                        ['label' => 'List', 'permission' => 'customers.view', 'route' => 'customers.index', 'active_routes' => ['customers.index', 'customers.show', 'customers.edit']],
                     ],
                 ],
                 [
@@ -215,7 +215,7 @@ return [
                         ['label' => 'Brands', 'permission' => 'products.view', 'route' => 'brands.index'],
                         ['label' => 'Categories', 'permission' => 'categories.view', 'route' => 'categories.index'],
                         ['label' => 'Unit Types', 'permission' => 'products.view', 'route' => 'unit-types.index'],
-                        ['label' => 'Upload Product By CSV', 'permission' => 'products.create', 'soon' => true],
+                        ['label' => 'Upload Product By CSV', 'permission' => 'products.create', 'route' => 'products.csv-upload'],
                         ['label' => 'Print Barcode / Labels', 'permission' => 'products.view', 'route' => 'barcodes.print'],
                         ['label' => 'Barcode Print Report', 'permission' => 'products.view', 'route' => 'barcodes.report'],
                         ['label' => 'Variations', 'permission' => 'products.view', 'route' => 'variations.index'],

@@ -1,6 +1,6 @@
-@extends('admin.layouts.dashboard')
+﻿@extends('admin.layouts.dashboard')
 
-@section('title', __('messages.add_new_user') . ' | ' . config('app.name', 'M POS'))
+@section('title', __('messages.add_new_user') . ' | ' . config('app.name', 'Micro POS'))
 
 @section('content')
 <div class="row">
@@ -27,7 +27,7 @@
                         <li class="breadcrumb-item active" aria-current="page">{{ __('messages.create') }}</li>
                     </ol>
                 </nav>
-                <h4 class="fw-bold mb-0 text-dark">{{ __('messages.add_new_user') }}</h4>
+                <h4 class="fw-bold mb-0 text-body">{{ __('messages.add_new_user') }}</h4>
             </div>
             <div>
                 <a href="{{ route('users.index') }}" class="btn btn-outline-secondary btn-sm px-3 fw-semibold shadow-sm" style="border-radius: 8px;">
@@ -37,8 +37,8 @@
         </div>
 
         <div class="card shadow-sm border-0 mb-4" style="border-radius: 12px;">
-            <div class="card-header bg-white border-bottom py-3">
-                <h6 class="mb-0 fw-bold text-dark">
+            <div class="card-header bg-transparent border-bottom py-3">
+                <h6 class="mb-0 fw-bold text-body">
                     <i class="bi bi-person-badge-fill text-primary me-2"></i>{{ __('messages.user_details') }}
                 </h6>
             </div>

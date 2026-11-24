@@ -1,6 +1,6 @@
-@extends('admin.layouts.dashboard')
+﻿@extends('admin.layouts.dashboard')
 
-@section('title', 'Print Product Barcode | ' . config('app.name', 'M POS'))
+@section('title', 'Print Product Barcode | ' . config('app.name', 'Micro POS'))
 
 @section('content')
 <div class="row">
@@ -13,7 +13,7 @@
                         <li class="breadcrumb-item active" aria-current="page">Barcode</li>
                     </ol>
                 </nav>
-                <h4 class="fw-bold mb-0 text-dark">Print product barcode</h4>
+                <h4 class="fw-bold mb-0 text-body">Print product barcode</h4>
             </div>
             <div>
                 <a href="{{ route('barcodes.report') }}" class="btn btn-outline-secondary btn-sm px-3 fw-semibold shadow-sm">
@@ -27,8 +27,8 @@
             <div class="col-12 col-xl-8">
                 {{-- Search Products Card --}}
                 <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
-                    <div class="card-header bg-white border-bottom py-3">
-                        <span class="fw-bold text-dark">Search products</span>
+                    <div class="card-header bg-transparent border-bottom py-3">
+                        <span class="fw-bold text-body">Search products</span>
                     </div>
                     <div class="card-body p-4">
                         {{-- Universal Barcode Search Component Integration --}}
@@ -45,8 +45,8 @@
 
                 {{-- Selected Products Card --}}
                 <div class="card border-0 shadow-sm" style="border-radius: 12px;">
-                    <div class="card-header bg-white border-bottom py-3 d-flex align-items-center justify-content-between">
-                        <span class="fw-bold text-dark">Selected products</span>
+                    <div class="card-header bg-transparent border-bottom py-3 d-flex align-items-center justify-content-between">
+                        <span class="fw-bold text-body">Selected products</span>
                         <button type="button" class="btn btn-sm btn-outline-danger" id="clearAllSelectedBtn" style="display: none;">
                             <i class="bi bi-trash"></i> Clear All
                         </button>
@@ -82,8 +82,8 @@
             {{-- Right Column: Label Settings (Matching Screenshots 6, 7, 8, 9) --}}
             <div class="col-12 col-xl-4">
                 <div class="card border-0 shadow-sm sticky-top" style="border-radius: 12px; top: 80px;">
-                    <div class="card-header bg-white border-bottom py-3 d-flex align-items-center justify-content-between">
-                        <span class="fw-bold text-dark">Label settings</span>
+                    <div class="card-header bg-transparent border-bottom py-3 d-flex align-items-center justify-content-between">
+                        <span class="fw-bold text-body">Label settings</span>
                         <button type="button" class="btn btn-link btn-sm text-decoration-none p-0 text-primary fw-semibold" id="resetSettingsBtn">
                             Reset
                         </button>

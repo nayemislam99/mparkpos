@@ -2,7 +2,7 @@
     <div class="sidebar-header border-bottom py-3 px-3">
         <div class="sidebar-brand d-flex align-items-center justify-content-between w-100">
             <a href="{{ route('dashboard.index') }}" class="d-flex align-items-center text-decoration-none sidebar-brand-full py-1">
-                <img src="{{ asset('admin/assets/img/mpos.png') }}" alt="{{ config('app.name', 'M POS') }}" style="max-height: 42px; max-width: 185px; object-fit: contain;">
+                <img src="{{ asset('admin/assets/img/mpos.png') }}" alt="{{ config('app.name', 'Micro POS') }}" style="max-height: 42px; max-width: 185px; object-fit: contain;">
             </a>
             <div class="sidebar-brand-narrow">
                 <span class="badge bg-danger fw-bold fs-6">M</span>

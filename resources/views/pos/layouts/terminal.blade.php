@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="theme-color" content="#f4f6fb">
-    <title>@yield('title', 'POS terminal | M POS')</title>
+    <title>@yield('title', 'POS terminal | Micro POS')</title>
 
     <link rel="stylesheet" href="{{ asset('admin/css/vendors/simplebar.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/css/style.css') }}">

@@ -4,16 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\ProductCategory;
 use App\Models\User;
+use App\Services\Csv\CsvService;
 use App\Services\Pos\TenantContext;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class CategoryController extends Controller
 {
     public function __construct(
         private TenantContext $tenant,
+        private CsvService $csvService,
     ) {}
 
     public function index(Request $request)
@@ -160,5 +163,95 @@ class CategoryController extends Controller
         $category->delete();
 
         return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
+    }
+
+    public function exportCsv(Request $request): StreamedResponse
+    {
+        /** @var User $user */
+        $user = $request->user();
+        abort_unless($user->can('categories.view') || $user->can('products.view'), 403);
+
+        $company = $this->tenant->company($user);
+        $categories = ProductCategory::where('company_id', $company->id)
+            ->withCount('products')
+            ->orderBy('name')
+            ->get();
+
+        $headers = ['ID', 'Category Name', 'Status', 'Products Count', 'Created At'];
+        $rows = [];
+        foreach ($categories as $c) {
+            $rows[] = [
+                $c->id,
+                $c->name,
+                $c->is_active ? 'Active' : 'Inactive',
+                $c->products_count,
+                $c->created_at?->format('Y-m-d H:i:s'),
+            ];
+        }
+
+        return $this->csvService->export('categories_' . date('Y_m_d_His') . '.csv', $headers, $rows);
+    }
+
+    public function sampleCsv(): StreamedResponse
+    {
+        $headers = ['name', 'is_active'];
+        $rows = [
+            ['Helmets', '1'],
+            ['Electronics', '1'],
+            ['Groceries', '1'],
+            ['Beverages', '0'],
+        ];
+
+        return $this->csvService->export('categories_sample_template.csv', $headers, $rows);
+    }
+
+    public function importCsv(Request $request): RedirectResponse
+    {
+        /** @var User $user */
+        $user = $request->user();
+        abort_unless($user->can('categories.create') || $user->can('products.create'), 403);
+
+        $request->validate([
+            'csv_file' => ['required', 'file', 'mimes:csv,txt', 'max:5120'],
+        ]);
+
+        $company = $this->tenant->company($user);
+        $records = $this->csvService->parse($request->file('csv_file'));
+
+        if (empty($records)) {
+            return redirect()->back()->with('error', __('messages.csv_no_valid_rows'));
+        }
+
+        $created = 0;
+        $skipped = 0;
+
+        foreach ($records as $row) {
+            $name = trim($row['name'] ?? $row['category_name'] ?? $row['category'] ?? '');
+            if ($name === '') {
+                $skipped++;
+                continue;
+            }
+
+            $exists = ProductCategory::where('company_id', $company->id)->where('name', $name)->exists();
+            if ($exists) {
+                $skipped++;
+                continue;
+            }
+
+            $isActive = !isset($row['is_active']) || in_array(strtolower(trim((string)$row['is_active'])), ['1', 'true', 'active', 'yes'], true);
+
+            ProductCategory::create([
+                'company_id' => $company->id,
+                'name' => $name,
+                'is_active' => $isActive,
+            ]);
+
+            $created++;
+        }
+
+        return redirect()->route('categories.index')->with('success', __('messages.csv_import_success', [
+            'created' => $created,
+            'skipped' => $skipped,
+        ]));
     }
 }

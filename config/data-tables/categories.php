@@ -36,8 +36,8 @@ return [
             ->whereNull('deleted_at')
             ->count();
 
-        $row->category_display = '<span class="fw-bold text-dark fs-6">' . e($row->name) . '</span>';
-        $row->products_display = '<span class="badge bg-light text-dark border px-2 py-1">' . $productsCount . '</span>';
+        $row->category_display = '<span class="fw-semibold text-body fs-6">' . e($row->name) . '</span>';
+        $row->products_display = '<span class="badge bg-body-tertiary text-body border px-2 py-1">' . $productsCount . '</span>';
 
         $activeLabel = __('messages.active');
         $inactiveLabel = __('messages.inactive');

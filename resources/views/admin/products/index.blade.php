@@ -1,6 +1,6 @@
-@extends('admin.layouts.dashboard')
+﻿@extends('admin.layouts.dashboard')
 
-@section('title', __('messages.all_products') . ' | ' . config('app.name', 'M POS'))
+@section('title', __('messages.all_products') . ' | ' . config('app.name', 'Micro POS'))
 
 @section('content')
 <div class="row">
@@ -21,10 +21,10 @@
 
         <div class="card shadow-sm border-0 mb-4" style="border-radius: 12px;">
             {{-- Header --}}
-            <div class="card-header bg-white border-bottom py-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+            <div class="card-header bg-transparent border-bottom py-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
                 <div>
-                    <h4 class="mb-0 fw-bold text-dark">{{ __('messages.all_products') }}</h4>
-                    <small class="text-muted fw-semibold">
+                    <h4 class="mb-0 fw-bold text-body">{{ __('messages.all_products') }}</h4>
+                    <small class="text-body-secondary fw-semibold">
                         {{ __('messages.products_count_summary', ['total' => $stats['total'], 'active' => $stats['active']]) }}
                         @if($stats['low_stock'] > 0)
                             &bull; <span class="text-danger">{{ __('messages.low_stock_count', ['count' => $stats['low_stock']]) }}</span>
@@ -32,6 +32,12 @@
                     </small>
                 </div>
                 <div class="d-flex align-items-center gap-2">
+                    <a href="{{ route('products.csv-upload') }}" class="btn btn-sm btn-teal text-white px-3 fw-semibold shadow-sm">
+                        <i class="bi bi-file-earmark-spreadsheet me-1"></i> {{ __('messages.csv_import_export') }}
+                    </a>
+                    <a href="{{ route('products.export.csv') }}" class="btn btn-sm btn-outline-secondary px-3 fw-semibold shadow-sm" title="{{ __('messages.download_csv_file') }}">
+                        <i class="bi bi-download me-1"></i> CSV
+                    </a>
                     <a href="{{ route('barcodes.print') }}" class="btn btn-sm btn-outline-secondary px-3 fw-semibold shadow-sm">
                         <i class="bi bi-upc-scan me-1"></i> {{ __('messages.print_barcode') }}
                     </a>
@@ -44,7 +50,7 @@
             </div>
 
             {{-- Filters Bar --}}
-            <div class="card-body pb-0 pt-3 border-bottom bg-light">
+            <div class="card-body pb-0 pt-3 border-bottom bg-body-tertiary">
                 <form action="{{ route('products.index') }}" method="GET" class="row g-2 align-items-center mb-3">
                     <div class="col-12 col-md-3 col-lg-2">
                         <select name="category_id" class="form-select form-select-sm" onchange="this.form.submit()">
@@ -120,16 +126,16 @@
                                             @endif
                                         </div>
                                         <div>
-                                            <div class="fw-bold text-dark">{{ $prod->name }}</div>
-                                            <small class="text-muted d-block font-monospace">
+                                            <div class="fw-bold text-body">{{ $prod->name }}</div>
+                                            <small class="text-body-secondary d-block font-monospace">
                                                 SKU: {{ $prod->sku }} | Barcode: {{ $prod->barcode }}
                                             </small>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="fw-semibold text-dark">{{ $prod->brandModel?->name ?: ($prod->brand ?: '—') }}</div>
-                                    <small class="text-muted">{{ $prod->category?->name ?: __('messages.uncategorized') }}</small>
+                                    <div class="fw-semibold text-body">{{ $prod->brandModel?->name ?: ($prod->brand ?: '—') }}</div>
+                                    <small class="text-body-secondary">{{ $prod->category?->name ?: __('messages.uncategorized') }}</small>
                                 </td>
                                 <td class="text-secondary">
                                     ৳ {{ number_format($prod->cost_price, 2) }}
@@ -143,7 +149,7 @@
                                             {{ $currentStock }} {{ $prod->unitType?->name ?: $prod->unit }}
                                         </span>
                                     @else
-                                        <span class="badge bg-light text-dark border">{{ __('messages.no_limit') }}</span>
+                                        <span class="badge bg-body-tertiary text-body border">{{ __('messages.no_limit') }}</span>
                                     @endif
                                 </td>
                                 <td>

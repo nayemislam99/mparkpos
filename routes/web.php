@@ -8,12 +8,14 @@ use App\Http\Controllers\BranchRolePermissionController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CrmController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DataTableController;
 use App\Http\Controllers\DataTableExportController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\PosTerminalController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UnitTypeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VariationController;
@@ -44,6 +46,15 @@ Route::prefix('/dashboard')->middleware(['auth'])->group(function () {
     Route::get('/dt/{key}/export/{format}/{language?}', [DataTableExportController::class, 'download'])
         ->name('dt.export');
 
+    // User Profile, Password & System Cache
+    Route::prefix('/profile')->name('profile.')->controller(ProfileController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::put('/', 'update')->name('update');
+        Route::get('/change-password', 'passwordView')->name('password');
+        Route::post('/change-password', 'updatePassword')->name('password.update');
+        Route::post('/clear-cache', 'clearCache')->name('clear-cache');
+    });
+
     // Users Management
     Route::prefix('/users')->name('users.')->controller(UserController::class)->group(function () {
         Route::get('/', 'index')->middleware('can:users.view')->name('index');
@@ -53,6 +64,19 @@ Route::prefix('/dashboard')->middleware(['auth'])->group(function () {
         Route::put('/{user}', 'update')->middleware('can:users.update')->name('update');
         Route::post('/{user}/toggle', 'toggleStatus')->middleware('can:users.update')->name('toggle');
         Route::delete('/{user}', 'destroy')->middleware('can:users.delete')->name('destroy');
+    });
+
+    // Customers Management
+    Route::prefix('/customers')->name('customers.')->controller(CustomerController::class)->group(function () {
+        Route::get('/', 'index')->middleware('can:customers.view')->name('index');
+        Route::get('/create', 'create')->middleware('can:customers.create')->name('create');
+        Route::post('/', 'store')->middleware('can:customers.create')->name('store');
+        Route::get('/{customer}', 'show')->middleware('can:customers.view')->name('show');
+        Route::get('/{customer}/edit', 'edit')->middleware('can:customers.update')->name('edit');
+        Route::put('/{customer}', 'update')->middleware('can:customers.update')->name('update');
+        Route::post('/{customer}/toggle', 'toggleStatus')->middleware('can:customers.update')->name('toggle');
+        Route::delete('/{customer}', 'destroy')->middleware('can:customers.delete')->name('destroy');
+        Route::post('/{customer}/collect-due', 'collectDue')->middleware('can:sales.collect_payment')->name('collect-due');
     });
 
     // Shop Branch: Branch management
@@ -92,6 +116,10 @@ Route::prefix('/dashboard')->middleware(['auth'])->group(function () {
         Route::get('/', 'index')->middleware('can:products.view')->name('index');
         Route::get('/create', 'create')->middleware('can:products.create')->name('create');
         Route::post('/', 'store')->middleware('can:products.create')->name('store');
+        Route::get('/upload-csv', 'uploadCsvView')->middleware('can:products.create')->name('csv-upload');
+        Route::get('/export/csv', 'exportCsv')->middleware('can:products.view')->name('export.csv');
+        Route::get('/sample/csv', 'sampleCsv')->middleware('can:products.create')->name('sample.csv');
+        Route::post('/import/csv', 'importCsv')->middleware('can:products.create')->name('import.csv');
         Route::post('/{product}/toggle', 'toggleStatus')->middleware('can:products.update')->name('toggle');
         Route::delete('/{product}', 'destroy')->middleware('can:products.delete')->name('destroy');
         Route::get('/generate-sku', 'generateSku')->name('generate-sku');
@@ -102,6 +130,9 @@ Route::prefix('/dashboard')->middleware(['auth'])->group(function () {
     Route::prefix('/brands')->name('brands.')->controller(BrandController::class)->group(function () {
         Route::get('/', 'index')->middleware('can:products.view')->name('index');
         Route::post('/', 'store')->middleware('can:products.create')->name('store');
+        Route::get('/export/csv', 'exportCsv')->middleware('can:products.view')->name('export.csv');
+        Route::get('/sample/csv', 'sampleCsv')->middleware('can:products.create')->name('sample.csv');
+        Route::post('/import/csv', 'importCsv')->middleware('can:products.create')->name('import.csv');
         Route::get('/{brand}', 'show')->middleware('can:products.view')->name('show');
         Route::put('/{brand}', 'update')->middleware('can:products.update')->name('update');
         Route::post('/{brand}/toggle', 'toggleStatus')->middleware('can:products.update')->name('toggle');
@@ -112,6 +143,9 @@ Route::prefix('/dashboard')->middleware(['auth'])->group(function () {
     Route::prefix('/categories')->name('categories.')->controller(CategoryController::class)->group(function () {
         Route::get('/', 'index')->middleware('can:categories.view')->name('index');
         Route::post('/', 'store')->middleware('can:categories.create')->name('store');
+        Route::get('/export/csv', 'exportCsv')->middleware('can:categories.view')->name('export.csv');
+        Route::get('/sample/csv', 'sampleCsv')->middleware('can:categories.create')->name('sample.csv');
+        Route::post('/import/csv', 'importCsv')->middleware('can:categories.create')->name('import.csv');
         Route::get('/{category}', 'show')->middleware('can:categories.view')->name('show');
         Route::put('/{category}', 'update')->middleware('can:categories.update')->name('update');
         Route::post('/{category}/toggle', 'toggleStatus')->middleware('can:categories.update')->name('toggle');
@@ -122,6 +156,9 @@ Route::prefix('/dashboard')->middleware(['auth'])->group(function () {
     Route::prefix('/unit-types')->name('unit-types.')->controller(UnitTypeController::class)->group(function () {
         Route::get('/', 'index')->middleware('can:products.view')->name('index');
         Route::post('/', 'store')->middleware('can:products.create')->name('store');
+        Route::get('/export/csv', 'exportCsv')->middleware('can:products.view')->name('export.csv');
+        Route::get('/sample/csv', 'sampleCsv')->middleware('can:products.create')->name('sample.csv');
+        Route::post('/import/csv', 'importCsv')->middleware('can:products.create')->name('import.csv');
         Route::get('/{unitType}', 'show')->middleware('can:products.view')->name('show');
         Route::put('/{unitType}', 'update')->middleware('can:products.update')->name('update');
         Route::post('/{unitType}/toggle', 'toggleStatus')->middleware('can:products.update')->name('toggle');

@@ -5,9 +5,9 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-  <meta name="description" content="@yield('meta_description', 'M POS administration dashboard')">
-  <meta name="author" content="@yield('meta_author', 'M POS')">
-  <meta name="keyword" content="@yield('meta_keyword', 'M POS,POS,Dashboard')">
+  <meta name="description" content="@yield('meta_description', 'Micro POS administration dashboard')">
+  <meta name="author" content="@yield('meta_author', 'Micro POS')">
+  <meta name="keyword" content="@yield('meta_keyword', 'Micro POS,POS,Dashboard')">
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <title>@yield('title', 'Admin')</title>

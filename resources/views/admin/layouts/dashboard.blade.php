@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', __('messages.dashboard') . ' | ' . config('app.name', 'M POS'))
+@section('title', __('messages.dashboard') . ' | ' . config('app.name', 'Micro POS'))
 
 @push('css')
   <link rel="stylesheet" href="{{ asset('admin/custom/pos-dashboard.css') }}">
@@ -83,23 +83,21 @@
   @endphp
 
   <main class="container-fluid px-4 pb-4 pos-dashboard">
-    {{-- Top Greeting & Slogan Banner in CoreUI card style --}}
-    <div class="card border-0 shadow-sm mb-4 bg-primary text-white overflow-hidden" style="border-radius: 1rem;">
-      <div class="card-body p-4 position-relative">
-        <div class="row align-items-center">
-          <div class="col-12 col-md-8">
-            <span class="badge bg-white text-primary mb-2 px-3 py-1 fw-bold rounded-pill">
+    {{-- Compact & Sleek Top Greeting Banner --}}
+    <div class="card border-0 shadow-sm mb-3 text-white overflow-hidden" style="border-radius: 0.75rem; background: linear-gradient(135deg, var(--pos-brand-primary, #d20101) 0%, #a50000 100%);">
+      <div class="card-body py-2.5 px-3 px-md-4">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <span class="badge bg-white px-2.5 py-1 fw-bold rounded-pill shadow-sm" style="color: #d20101 !important; font-size: 0.82rem;">
               <i class="bi bi-lightning-charge-fill text-warning me-1"></i>
-              {{ auth()->user()->company->trade_name ?? auth()->user()->company->name ?? 'M POS' }}
+              {{ auth()->user()->company->trade_name ?? auth()->user()->company->name ?? 'Micro POS' }}
             </span>
-            <h1 class="h3 fw-bold mb-1">{{ $greeting }}</h1>
-            <p class="mb-0 opacity-75">{{ __('messages.dashboard_subtitle') }}</p>
+            <span class="fw-bold fs-6 text-white">{{ $greeting }}</span>
+            <span class="text-white small d-none d-lg-inline" style="opacity: 0.85;">&bull; {{ __('messages.dashboard_subtitle') }}</span>
           </div>
-          <div class="col-12 col-md-4 text-md-end mt-3 mt-md-0">
-            <div class="d-inline-flex flex-column align-items-md-end p-3 rounded-3 bg-white bg-opacity-10 border border-white border-opacity-25">
-              <span class="small opacity-75">{{ __('messages.app_name') }}</span>
-              <span class="fw-bold fs-5">{{ __('messages.tagline_bn_quote') }}</span>
-            </div>
+          <div class="d-none d-sm-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill shadow-sm" style="background: rgba(0, 0, 0, 0.22); border: 1px solid rgba(255, 255, 255, 0.25); color: #ffffff; font-size: 0.85rem; font-weight: 600;">
+            <i class="bi bi-stars text-warning"></i>
+            <span style="color: #ffffff !important;">{{ __('messages.tagline') }}</span>
           </div>
         </div>
       </div>
@@ -276,38 +274,122 @@
       </div>
     </section>
 
-    {{-- Quick Response Footer --}}
-    <div class="card border-0 shadow-sm mt-4">
-      <div class="card-body d-flex flex-wrap align-items-center justify-content-between gap-3 py-3 px-4">
-        <div class="d-flex align-items-center gap-2">
-          <i class="bi bi-lightning-fill text-warning fs-5"></i>
-          <span class="fw-bold">{{ __('messages.quick_response') }}</span>
-          <span class="text-body-secondary small d-none d-md-inline">| {{ __('messages.tagline') }}</span>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-          @can('branches.view')
-            <a href="{{ route('branches.index') }}" class="btn btn-sm btn-outline-primary">
-              <i class="bi bi-shop me-1"></i> {{ __('messages.branch') }}
-            </a>
-          @endcan
-          @can('roles.view')
-            <a href="{{ route('branch-roles.index') }}" class="btn btn-sm btn-outline-primary">
-              <i class="bi bi-shield-check me-1"></i> {{ __('messages.branch_role_permission') }}
-            </a>
-          @endcan
-          @can('customers.view')
-            <a href="{{ route('crm.index') }}" class="btn btn-sm btn-outline-primary">
-              <i class="bi bi-people me-1"></i> {{ __('messages.crm') }}
-            </a>
-          @endcan
-          @can('sales.create')
-            <a href="{{ route('pos.terminal') }}" class="btn btn-sm btn-warning fw-bold">
-              <i class="bi bi-cart me-1"></i> {{ __('messages.sell') }}
-            </a>
-          @endcan
+    {{-- Two Bottom Overview Cards: Customer Overview & Supplier Overview --}}
+    <section class="row g-4 mt-1">
+      {{-- 1. Customer Overview Card (Left side) --}}
+      <div class="col-12 col-lg-6">
+        <div class="card border-0 shadow-sm h-100" style="border-radius: 0.75rem;">
+          <div class="card-header bg-transparent border-0 px-4 pt-3 pb-2 d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="fw-bold mb-0 text-body">
+                <i class="bi bi-people-fill text-primary me-2"></i>{{ __('messages.customer_overview') }}
+              </h6>
+              <small class="text-body-secondary">{{ __('messages.customer_overview_sub') }}</small>
+            </div>
+            @can('customers.view')
+              <a href="{{ route('customers.index') }}" class="btn btn-sm btn-outline-primary px-2.5 py-1 small fw-semibold">
+                {{ __('messages.view_all') }} <i class="bi bi-arrow-right ms-1"></i>
+              </a>
+            @endcan
+          </div>
+          <div class="card-body px-4 pb-3 pt-2">
+            <div class="row g-3 mb-3">
+              <div class="col-6">
+                <div class="p-3 rounded-3 bg-danger-subtle border border-danger-subtle h-100">
+                  <div class="text-danger small fw-semibold text-uppercase mb-1">{{ __('messages.total_due_amount') }}</div>
+                  <div class="fs-4 fw-bold text-danger">৳ {{ number_format($customerStats['total_due'] ?? 0, 2) }}</div>
+                  <div class="small text-danger opacity-75 mt-1">
+                    {{ $customerStats['with_due'] ?? 0 }} {{ __('messages.customers_with_due') }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-3 rounded-3 bg-success-subtle border border-success-subtle h-100">
+                  <div class="text-success small fw-semibold text-uppercase mb-1">{{ __('messages.total_advance_balance') }}</div>
+                  <div class="fs-4 fw-bold text-success">৳ {{ number_format($customerStats['total_advance'] ?? 0, 2) }}</div>
+                  <div class="small text-success opacity-75 mt-1">
+                    {{ $customerStats['total'] ?? 0 }} {{ __('messages.active_customers') }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 pt-2 border-top">
+              <div class="text-body-secondary small">
+                <i class="bi bi-person-check text-success me-1"></i> {{ $customerStats['total'] ?? 0 }} {{ __('messages.registered_customers') }}
+              </div>
+              <div class="d-flex gap-2">
+                @can('customers.create')
+                  <a href="{{ route('customers.create') }}" class="btn btn-sm btn-outline-secondary fw-semibold">
+                    <i class="bi bi-person-plus me-1"></i> {{ __('messages.add_customer') }}
+                  </a>
+                @endcan
+                @can('customers.view')
+                  <a href="{{ route('customers.index') }}" class="btn btn-sm btn-teal text-white fw-semibold">
+                    <i class="bi bi-cash-coin me-1"></i> {{ __('messages.collect_due') }}
+                  </a>
+                @endcan
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+
+      {{-- 2. Supplier Overview Card (Right side) --}}
+      <div class="col-12 col-lg-6">
+        <div class="card border-0 shadow-sm h-100" style="border-radius: 0.75rem;">
+          <div class="card-header bg-transparent border-0 px-4 pt-3 pb-2 d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="fw-bold mb-0 text-body">
+                <i class="bi bi-truck text-warning me-2"></i>{{ __('messages.supplier_overview') }}
+              </h6>
+              <small class="text-body-secondary">{{ __('messages.supplier_overview_sub') }}</small>
+            </div>
+            <span class="badge bg-warning-subtle text-dark border border-warning-subtle px-2.5 py-1 rounded-pill small fw-semibold">
+              <i class="bi bi-box-seam me-1"></i>{{ __('messages.purchases_and_stock') }}
+            </span>
+          </div>
+          <div class="card-body px-4 pb-3 pt-2">
+            <div class="row g-3 mb-3">
+              <div class="col-6">
+                <div class="p-3 rounded-3 bg-info-subtle border border-info-subtle h-100">
+                  <div class="text-info-emphasis small fw-semibold text-uppercase mb-1">{{ __('messages.supplier_advance_balance') }}</div>
+                  <div class="fs-4 fw-bold text-info-emphasis">৳ {{ number_format($metrics['supplier_advance_balance'] ?? 0, 2) }}</div>
+                  <div class="small text-body-secondary mt-1">
+                    {{ __('messages.available_supplier_advance') }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-3 rounded-3 bg-primary-subtle border border-primary-subtle h-100">
+                  <div class="text-primary small fw-semibold text-uppercase mb-1">{{ __('messages.todays_purchases') }}</div>
+                  <div class="fs-4 fw-bold text-primary">৳ {{ number_format($metrics['todays_purchases'] ?? 0, 2) }}</div>
+                  <div class="small text-body-secondary mt-1">
+                    {{ __('messages.todays_supplier_return') }}: ৳ {{ number_format($metrics['todays_supplier_return'] ?? 0, 2) }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 pt-2 border-top">
+              <div class="text-body-secondary small">
+                <i class="bi bi-arrow-repeat text-primary me-1"></i> {{ __('messages.todays_payments') }}: ৳ {{ number_format($metrics['todays_payments'] ?? 0, 2) }}
+              </div>
+              <div class="d-flex gap-2">
+                @can('products.view')
+                  <a href="{{ route('products.index') }}" class="btn btn-sm btn-outline-secondary fw-semibold">
+                    <i class="bi bi-boxes me-1"></i> {{ __('messages.all_products') }}
+                  </a>
+                @endcan
+                @can('sales.create')
+                  <a href="{{ route('pos.terminal') }}" class="btn btn-sm btn-warning text-dark fw-bold">
+                    <i class="bi bi-cart me-1"></i> {{ __('messages.sell') }}
+                  </a>
+                @endcan
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <script>

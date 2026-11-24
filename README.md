@@ -1,4 +1,4 @@
-# M POS
+# Micro POS
 
 A Laravel 13 point-of-sale foundation using PHP 8.3+ and MySQL.
 

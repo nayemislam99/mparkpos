@@ -1,6 +1,6 @@
-@extends('admin.layouts.dashboard')
+﻿@extends('admin.layouts.dashboard')
 
-@section('title', 'Add Product | ' . config('app.name', 'M POS'))
+@section('title', 'Add Product | ' . config('app.name', 'Micro POS'))
 
 @section('content')
 <div class="row">
@@ -32,7 +32,7 @@
                         <li class="breadcrumb-item active" aria-current="page">Add product</li>
                     </ol>
                 </nav>
-                <h4 class="fw-bold mb-0 text-dark">Add product</h4>
+                <h4 class="fw-bold mb-0 text-body">Add product</h4>
             </div>
             <div>
                 <a href="{{ route('products.index') }}" class="btn btn-outline-secondary btn-sm px-3 fw-semibold">
@@ -48,8 +48,8 @@
                 <div class="col-12 col-xl-8">
                     {{-- Basic details Card matching Screenshot 2 --}}
                     <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
-                        <div class="card-header bg-white border-bottom py-3">
-                            <span class="fw-bold text-dark">Basic details</span>
+                        <div class="card-header bg-transparent border-bottom py-3">
+                            <span class="fw-bold text-body">Basic details</span>
                         </div>
                         <div class="card-body p-4">
                             <div class="mb-3">
@@ -123,9 +123,9 @@
 
                     {{-- More pricing Card (Alternative selling prices) --}}
                     <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
-                        <div class="card-header bg-white border-bottom py-3 d-flex align-items-center justify-content-between">
+                        <div class="card-header bg-transparent border-bottom py-3 d-flex align-items-center justify-content-between">
                             <div>
-                                <span class="fw-bold text-dark">More pricing</span>
+                                <span class="fw-bold text-body">More pricing</span>
                                 <small class="text-muted d-block">Alternative selling prices</small>
                             </div>
                             <button type="button" class="btn btn-sm btn-teal text-white fw-semibold" id="addPriceRowBtn">
@@ -165,8 +165,8 @@
 
                     {{-- Discount, VAT and income tax Card --}}
                     <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
-                        <div class="card-header bg-white border-bottom py-3">
-                            <span class="fw-bold text-dark">Discount, VAT and income tax</span>
+                        <div class="card-header bg-transparent border-bottom py-3">
+                            <span class="fw-bold text-body">Discount, VAT and income tax</span>
                         </div>
                         <div class="card-body p-4">
                             <div class="row g-4">
@@ -205,8 +205,8 @@
 
                     {{-- Product Type Card (Simple, Variable, Multiple Variation) --}}
                     <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
-                        <div class="card-header bg-white border-bottom py-3">
-                            <span class="fw-bold text-dark">Product Type</span>
+                        <div class="card-header bg-transparent border-bottom py-3">
+                            <span class="fw-bold text-body">Product Type</span>
                         </div>
                         <div class="card-body p-4">
                             <ul class="nav nav-pills mb-4 nav-justified" id="pills-tab" role="tablist">
@@ -294,8 +294,8 @@
 
                     {{-- Description Card --}}
                     <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
-                        <div class="card-header bg-white border-bottom py-3">
-                            <span class="fw-bold text-dark">Description</span>
+                        <div class="card-header bg-transparent border-bottom py-3">
+                            <span class="fw-bold text-body">Description</span>
                         </div>
                         <div class="card-body p-4">
                             <textarea name="description" class="form-control" rows="4" placeholder="Product description, technical specifications, notes...">{{ old('description') }}</textarea>
@@ -307,8 +307,8 @@
                 <div class="col-12 col-xl-4">
                     {{-- Image Card matching Screenshot 2 --}}
                     <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
-                        <div class="card-header bg-white border-bottom py-3">
-                            <span class="fw-bold text-dark">Image (80 X 80)</span>
+                        <div class="card-header bg-transparent border-bottom py-3">
+                            <span class="fw-bold text-body">Image (80 X 80)</span>
                         </div>
                         <div class="card-body p-4 text-center">
                             <div class="border rounded p-4 bg-light mb-2 position-relative" style="min-height: 120px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
@@ -322,8 +322,8 @@
 
                     {{-- Barcode and SKU Card --}}
                     <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
-                        <div class="card-header bg-white border-bottom py-3">
-                            <span class="fw-bold text-dark">Barcode and SKU</span>
+                        <div class="card-header bg-transparent border-bottom py-3">
+                            <span class="fw-bold text-body">Barcode and SKU</span>
                         </div>
                         <div class="card-body p-4">
                             <div class="mb-3">
@@ -345,8 +345,8 @@
 
                     {{-- Stock alert and warranty Card --}}
                     <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
-                        <div class="card-header bg-white border-bottom py-3">
-                            <span class="fw-bold text-dark">Stock alert and warranty</span>
+                        <div class="card-header bg-transparent border-bottom py-3">
+                            <span class="fw-bold text-body">Stock alert and warranty</span>
                         </div>
                         <div class="card-body p-4">
                             <div class="mb-3">

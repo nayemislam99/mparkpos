@@ -1,6 +1,6 @@
-@extends('admin.layouts.dashboard')
+﻿@extends('admin.layouts.dashboard')
 
-@section('title', __('messages.all_crm') . ' | ' . config('app.name', 'M POS'))
+@section('title', __('messages.all_crm') . ' | ' . config('app.name', 'Micro POS'))
 
 @section('content')
 <div class="row">
@@ -33,10 +33,10 @@
 
         <div class="card shadow-sm border-0 mb-4">
             {{-- Header matching Screenshot 3 --}}
-            <div class="card-header bg-white border-bottom py-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+            <div class="card-header bg-transparent border-bottom py-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
                 <div>
-                    <h4 class="mb-0 fw-bold text-dark">{{ __('messages.all_crm') }}</h4>
-                    <small class="text-muted fw-semibold">
+                    <h4 class="mb-0 fw-bold text-body">{{ __('messages.all_crm') }}</h4>
+                    <small class="text-body-secondary fw-semibold">
                         {{ __('messages.crm_count', ['count' => $crmCount]) }}
                         @if($deactivatedCount > 0)
                             &bull; <span class="text-danger">{{ $deactivatedCount }} Deactivated</span>

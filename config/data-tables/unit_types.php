@@ -33,8 +33,8 @@ return [
     ],
     'exports' => [], // Hidden per client requirement
     'formatter' => function ($row) {
-        $row->unit_display = '<span class="fw-bold text-dark fs-6">' . e($row->name) . '</span>';
-        $row->code_display = '<span class="badge bg-light text-dark border px-2 py-1">' . e($row->code ?? '-') . '</span>';
+        $row->unit_display = '<span class="fw-semibold text-body fs-6">' . e($row->name) . '</span>';
+        $row->code_display = '<span class="badge bg-body-tertiary text-body border px-2 py-1">' . e($row->code ?? '-') . '</span>';
 
         $activeLabel = __('messages.active');
         $inactiveLabel = __('messages.inactive');
