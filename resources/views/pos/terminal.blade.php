@@ -1,6 +1,6 @@
 @extends('pos.layouts.terminal')
 
-@section('title', 'POS terminal | M POS')
+@section('title', 'POS terminal | Micro POS')
 
 @push('css')
     <link rel="stylesheet" href="{{ asset('admin/custom/pos-terminal.css') }}">
@@ -17,7 +17,7 @@
         data-invoice-payment-url="{{ url('/dashboard/pos/invoices/__SALE__/payments') }}">
         <header class="pos-toolbar">
             <div class="pos-toolbar-brand">
-                <strong>M POS</strong>
+                <strong>Micro POS</strong>
                 <span class="pos-toolbar-divider"></span>
                 <span id="posCurrentDate"></span>
                 <time id="posCurrentTime"></time>

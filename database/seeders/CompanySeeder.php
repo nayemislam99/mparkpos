@@ -15,8 +15,8 @@ class CompanySeeder extends Seeder
         Company::updateOrCreate(
             ['bin' => '001234567-0101'], // UNIQUE KEY
             [
-                'name' => 'M POS Demo Store',
-                'trade_name' => 'M POS',
+                'name' => 'Micro POS Demo Store',
+                'trade_name' => 'Micro POS',
                 'tin' => '123456789012',
                 'business_type' => 'service',
                 'email' => 'store@mpos.local',

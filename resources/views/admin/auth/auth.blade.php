@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{ config('app.name', 'M POS') }}</title>
+    <title>{{ config('app.name', 'Micro POS') }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CoreUI CSS -->

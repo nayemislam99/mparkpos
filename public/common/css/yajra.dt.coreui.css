@@ -46,46 +46,59 @@ html, body { overflow-x: hidden !important; }
 
 /* Custom DOM toolbar layout */
 .dt-scope .dataTables_wrapper .dt-table-toolbar{
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) minmax(220px, auto);
-  align-items: center;
-  gap: 12px;
-  margin: 0 0 12px !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
+  gap: 16px !important;
+  margin: 0 0 16px !important;
 }
-.dt-scope .dataTables_wrapper .dt-toolbar-exports{
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-  min-width: 0;
+.dt-scope .dataTables_wrapper .dt-toolbar-exports,
+.dt-scope .dataTables_wrapper .dt-export-group,
+.dt-toolbar-exports,
+.dt-export-group{
+  display: none !important;
+  visibility: hidden !important;
+}
+.dt-scope .dataTables_wrapper .dt-table-length{
+  flex: 0 0 auto !important;
 }
 .dt-scope .dataTables_wrapper .dt-table-length label{
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
-  white-space: nowrap;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
 }
 .dt-scope .dataTables_wrapper .dt-table-length select{
-  width: auto;
+  width: auto !important;
+  display: inline-block !important;
 }
 .dt-scope .dataTables_wrapper .dt-export-group,
 .dt-scope .dataTables_wrapper .dt-bulk-group{
   margin: 0 !important;
 }
-.dt-scope .dataTables_wrapper .dt-table-search{
-  justify-self: end;
+.dt-scope .dataTables_wrapper .dt-table-search,
+.dt-scope .dataTables_wrapper .dataTables_filter{
+  margin-left: auto !important;
+  flex: 0 0 auto !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+  text-align: right !important;
 }
-.dt-scope .dataTables_wrapper .dt-table-search label{
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
-  white-space: nowrap;
+.dt-scope .dataTables_wrapper .dt-table-search label,
+.dt-scope .dataTables_wrapper .dataTables_filter label{
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
 }
-.dt-scope .dataTables_wrapper .dt-table-search input{
-  width: min(220px, 100%);
-  margin-left: 0;
+.dt-scope .dataTables_wrapper .dt-table-search input,
+.dt-scope .dataTables_wrapper .dataTables_filter input{
+  width: 260px !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
 }
 .dt-scope .dataTables_wrapper .dt-table-footer{
   display: flex;
@@ -131,14 +144,20 @@ html, body { overflow-x: hidden !important; }
 /* Mobile toolbar stack */
 @media (max-width: 767.98px){
   .dt-scope .dataTables_wrapper .dt-table-toolbar{
-    grid-template-columns: minmax(0, 1fr);
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
   }
-  .dt-scope .dataTables_wrapper .dt-table-search{
-    justify-self: stretch;
+  .dt-scope .dataTables_wrapper .dt-table-search,
+  .dt-scope .dataTables_wrapper .dataTables_filter{
+    margin-left: 0 !important;
+    width: 100% !important;
+    justify-content: stretch !important;
   }
-  .dt-scope .dataTables_wrapper .dt-table-search input{
-    flex: 1;
-    width: auto;
+  .dt-scope .dataTables_wrapper .dt-table-search input,
+  .dt-scope .dataTables_wrapper .dataTables_filter input{
+    flex: 1 1 auto !important;
+    width: 100% !important;
   }
   .dt-scope .dataTables_wrapper .dt-table-footer{
     align-items: flex-start;

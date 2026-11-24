@@ -45,6 +45,8 @@
     const $toolbar = $table.closest(".dataTables_wrapper").find(".dt-toolbar-exports");
     if (!$toolbar.length) return;
 
+    // Client request: hide/disable default exports across all tables (custom PDF/Excel will be implemented if needed)
+    /*
     const key = $table.data("dt-key");
     const exports = parseAttribute($table, "data-dt-exports", []);
     if (key && Array.isArray(exports) && exports.length && !$toolbar.find(".dt-export-group").length) {
@@ -68,6 +70,7 @@
 
       $toolbar.append($group);
     }
+    */
 
     const bulkActions = parseAttribute($table, "data-dt-bulk-actions", []);
     if (Array.isArray(bulkActions) && bulkActions.length && !$toolbar.find(".dt-bulk-group").length) {
@@ -135,7 +138,14 @@
     }
 
     tableColumns.forEach((column) => {
-      if (column.data !== null && !htmlColumns.includes(column.data)) {
+      if (typeof column.render === "string") {
+        if (typeof window[column.render] === "function") {
+          column.render = window[column.render];
+        } else {
+          delete column.render;
+        }
+      }
+      if (column.data !== null && !htmlColumns.includes(column.data) && typeof column.render !== "function") {
         column.render = $.fn.dataTable.render.text();
       }
     });
@@ -151,12 +161,46 @@
 
     const filterScope = $table.data("dt-filter-scope") || null;
     const base = (window.DT_BASE || "/dashboard/dt").replace(/\/$/, "");
+    const isBn = ($("html").attr("lang") || "").toLowerCase().startsWith("bn");
+    const dtLanguage = isBn ? {
+      search: "খুঁজুন:",
+      searchPlaceholder: "অনুসন্ধান করুন...",
+      lengthMenu: "প্রদর্শন _MENU_ টি",
+      info: "_TOTAL_ টির মধ্যে _START_ থেকে _END_ দেখানো হচ্ছে",
+      infoEmpty: "০ টির মধ্যে ০ দেখানো হচ্ছে",
+      infoFiltered: "(মোট _MAX_ টি থেকে ফিল্টার করা)",
+      zeroRecords: "কোনো তথ্য পাওয়া যায়নি",
+      emptyTable: "টেবিলে কোনো তথ্য নেই",
+      paginate: {
+        first: "প্রথম",
+        previous: "পূর্ববর্তী",
+        next: "পরবর্তী",
+        last: "শেষ"
+      }
+    } : {
+      search: "Search:",
+      searchPlaceholder: "Search...",
+      lengthMenu: "Show _MENU_ entries",
+      info: "Showing _START_ to _END_ of _TOTAL_ entries",
+      infoEmpty: "Showing 0 to 0 of 0 entries",
+      infoFiltered: "(filtered from _MAX_ total entries)",
+      zeroRecords: "No matching records found",
+      emptyTable: "No data available in table",
+      paginate: {
+        first: "First",
+        previous: "Previous",
+        next: "Next",
+        last: "Last"
+      }
+    };
+
     const dataTable = $table.DataTable({
       processing: true,
       serverSide: true,
       responsive: responsiveControl
         ? { details: { type: "column", target: 0 } }
         : true,
+      language: dtLanguage,
       dom: '<"dt-table-toolbar"<"dt-table-length"l><"dt-toolbar-exports"><"dt-table-search"f>>rt<"dt-table-footer"<"dt-table-info"i><"dt-table-pagination"p>>',
       pageLength: Number($table.attr("data-page-length")) || 25,
       lengthMenu: [10, 25, 50, 100],

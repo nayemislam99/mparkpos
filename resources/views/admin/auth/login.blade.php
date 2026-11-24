@@ -3,14 +3,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#101b2d">
-    <title>Sign in | {{ config('app.name', 'M POS') }}</title>
+    <meta name="theme-color" content="#191715">
+    <title>Sign in | {{ config('app.name', 'Micro POS') }}</title>
     <style>
         :root {
             color-scheme: light;
             font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
             color: #172235;
-            background: #f3f6fa;
+            background: #f8fafc;
             font-synthesis: none;
             text-rendering: optimizeLegibility;
         }
@@ -25,8 +25,8 @@
             place-items: center;
             padding: 32px;
             background:
-                radial-gradient(ellipse at 18% 12%, rgba(52, 211, 153, .13), transparent 34%),
-                #f3f6fa;
+                radial-gradient(ellipse at 18% 12%, rgba(210, 1, 1, .09), transparent 34%),
+                #f8fafc;
         }
 
         .login-shell {
@@ -35,10 +35,10 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             overflow: hidden;
-            border: 1px solid #e6ebf1;
+            border: 1px solid #e2e8f0;
             border-radius: 24px;
             background: #fff;
-            box-shadow: 0 28px 80px rgba(27, 43, 65, .12);
+            box-shadow: 0 28px 80px rgba(25, 23, 21, .14);
         }
 
         .brand-panel {
@@ -50,8 +50,8 @@
             padding: 48px;
             color: #fff;
             background:
-                radial-gradient(circle at 88% 18%, rgba(52, 211, 153, .2), transparent 25%),
-                linear-gradient(145deg, #13243b, #101b2d 72%);
+                radial-gradient(circle at 88% 18%, rgba(210, 1, 1, .35), transparent 30%),
+                linear-gradient(145deg, #1f1b18, #191715 72%);
         }
 
         .brand-panel::after {
@@ -60,9 +60,9 @@
             bottom: -180px;
             width: 400px;
             height: 400px;
-            border: 1px solid rgba(255, 255, 255, .09);
+            border: 1px solid rgba(255, 255, 255, .08);
             border-radius: 50%;
-            box-shadow: 0 0 0 42px rgba(255, 255, 255, .025), 0 0 0 84px rgba(255, 255, 255, .02);
+            box-shadow: 0 0 0 42px rgba(210, 1, 1, .04), 0 0 0 84px rgba(210, 1, 1, .02);
             content: "";
             pointer-events: none;
         }
@@ -78,70 +78,64 @@
             letter-spacing: -.04em;
         }
 
-        .brand-mark {
-            display: grid;
-            width: 42px;
-            height: 42px;
-            place-items: center;
-            border-radius: 13px;
-            color: #10251f;
-            background: #70e0b0;
-            font-size: 18px;
-            font-weight: 850;
+        .brand img {
+            max-height: 44px;
+            width: auto;
+            object-fit: contain;
         }
 
         .brand-copy { max-width: 390px; margin: auto 0; padding: 72px 0; }
-        .eyebrow { color: #8ae5bd; font-size: 12px; font-weight: 750; letter-spacing: .16em; text-transform: uppercase; }
+        .eyebrow { color: #f87171; font-size: 12px; font-weight: 750; letter-spacing: .16em; text-transform: uppercase; }
         .brand-copy h1 { margin: 18px 0 16px; font-size: clamp(36px, 4vw, 52px); line-height: 1.08; letter-spacing: -.055em; }
-        .brand-copy p { max-width: 360px; margin: 0; color: #b7c4d4; font-size: 15px; line-height: 1.8; }
-        .brand-footer { color: #8392a7; font-size: 12px; }
+        .brand-copy p { max-width: 360px; margin: 0; color: #cbd5e1; font-size: 15px; line-height: 1.8; }
+        .brand-footer { color: #94a3b8; font-size: 12px; }
 
         .form-panel { display: flex; align-items: center; justify-content: center; padding: 56px; }
         .form-content { width: min(100%, 360px); }
         .form-content h2 { margin: 0; font-size: 30px; letter-spacing: -.045em; }
-        .intro { margin: 10px 0 32px; color: #7a8798; font-size: 14px; line-height: 1.6; }
+        .intro { margin: 10px 0 32px; color: #64748b; font-size: 14px; line-height: 1.6; }
         .field { margin-bottom: 20px; }
-        .field label { display: block; margin-bottom: 8px; color: #344156; font-size: 13px; font-weight: 650; }
+        .field label { display: block; margin-bottom: 8px; color: #334155; font-size: 13px; font-weight: 650; }
         .field input {
             width: 100%;
             height: 48px;
             padding: 0 14px;
-            border: 1px solid #dfe5ec;
+            border: 1px solid #cbd5e1;
             border-radius: 10px;
             outline: none;
             background: #fff;
-            color: #172235;
+            color: #191715;
             font: inherit;
             font-size: 14px;
             transition: border-color .15s, box-shadow .15s;
         }
-        .field input:focus { border-color: #35b982; box-shadow: 0 0 0 3px rgba(53, 185, 130, .14); }
-        .field input::placeholder { color: #a4adba; }
-        .field input[aria-invalid="true"] { border-color: #dc5364; }
-        .field-error { margin: 7px 0 0; color: #bc3547; font-size: 12px; }
+        .field input:focus { border-color: #d20101; box-shadow: 0 0 0 3px rgba(210, 1, 1, .16); }
+        .field input::placeholder { color: #94a3b8; }
+        .field input[aria-invalid="true"] { border-color: #dc2626; }
+        .field-error { margin: 7px 0 0; color: #dc2626; font-size: 12px; }
         .form-options { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 4px 0 24px; }
-        .remember { display: inline-flex; align-items: center; gap: 8px; color: #687588; font-size: 13px; }
-        .remember input { accent-color: #209a69; }
-        a { color: #16875c; font-size: 13px; font-weight: 650; text-decoration: none; }
-        a:hover { text-decoration: underline; }
+        .remember { display: inline-flex; align-items: center; gap: 8px; color: #64748b; font-size: 13px; }
+        .remember input { accent-color: #d20101; }
+        a { color: #d20101; font-size: 13px; font-weight: 650; text-decoration: none; }
+        a:hover { text-decoration: underline; color: #b50000; }
         .submit {
             width: 100%;
             height: 49px;
             border: 0;
             border-radius: 10px;
             color: #fff;
-            background: #16875c;
-            box-shadow: 0 7px 16px rgba(22, 135, 92, .18);
+            background: #d20101;
+            box-shadow: 0 7px 16px rgba(210, 1, 1, .25);
             cursor: pointer;
             font: inherit;
             font-size: 14px;
             font-weight: 700;
             transition: background .15s, transform .15s;
         }
-        .submit:hover { transform: translateY(-1px); background: #11764f; }
-        .demo-note { margin-top: 24px; padding: 13px 14px; border: 1px solid #dcefe6; border-radius: 10px; color: #527060; background: #f3fbf7; font-size: 12px; line-height: 1.7; }
-        .demo-note strong { color: #226b4b; }
-        .security-note { margin: 24px 0 0; color: #98a2b0; font-size: 11px; text-align: center; }
+        .submit:hover { transform: translateY(-1px); background: #b50000; }
+        .demo-note { margin-top: 24px; padding: 13px 14px; border: 1px solid #fee2e2; border-radius: 10px; color: #7f1d1d; background: #fef2f2; font-size: 12px; line-height: 1.7; }
+        .demo-note strong { color: #991b1b; }
+        .security-note { margin: 24px 0 0; color: #94a3b8; font-size: 11px; text-align: center; }
 
         @media (max-width: 760px) {
             body { padding: 16px; }
@@ -158,10 +152,9 @@
 </head>
 <body>
     <main class="login-shell">
-        <section class="brand-panel" aria-label="M POS">
+        <section class="brand-panel" aria-label="Micro POS">
             <div class="brand">
-                <span class="brand-mark" aria-hidden="true">M</span>
-                <span>{{ config('app.name', 'M POS') }}</span>
+                <img src="{{ asset('admin/assets/img/mpos.png') }}" alt="{{ config('app.name', 'Micro POS') }}">
             </div>
             <div class="brand-copy">
                 <span class="eyebrow">Point of sale</span>
@@ -174,7 +167,7 @@
         <section class="form-panel">
             <div class="form-content">
                 <h2>Welcome back</h2>
-                <p class="intro">Sign in to continue to your M POS workspace.</p>
+                <p class="intro">Sign in to continue to your Micro POS workspace.</p>
 
                 <form method="POST" action="{{ route('auth.login.submit') }}">
                     @csrf

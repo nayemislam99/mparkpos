@@ -10,6 +10,8 @@ return [
             'label' => 'Store admin',
             'permissions' => [
                 'dashboard.view',
+                'branches.view', 'branches.create', 'branches.update', 'branches.delete',
+                'roles.view', 'roles.update',
                 'users.view', 'users.create', 'users.update', 'users.delete', 'users.export',
                 'customers.view', 'customers.create', 'customers.update', 'customers.delete',
                 'products.view', 'products.create', 'products.update', 'products.delete', 'products.export',
@@ -23,6 +25,8 @@ return [
             'label' => 'Store manager',
             'permissions' => [
                 'dashboard.view',
+                'branches.view',
+                'roles.view',
                 'users.view',
                 'customers.view', 'customers.create',
                 'products.view', 'products.create', 'products.update', 'products.export',
@@ -69,6 +73,22 @@ return [
             'label' => 'Dashboard',
             'permissions' => ['dashboard.view' => 'View dashboard'],
         ],
+        'branches' => [
+            'label' => 'Shop Branch',
+            'permissions' => [
+                'branches.view' => 'View branches',
+                'branches.create' => 'Create branches',
+                'branches.update' => 'Update branches',
+                'branches.delete' => 'Delete branches',
+            ],
+        ],
+        'roles' => [
+            'label' => 'Roles & permissions',
+            'permissions' => [
+                'roles.view' => 'View branch roles and permissions',
+                'roles.update' => 'Update branch roles and permissions',
+            ],
+        ],
         'users' => [
             'label' => 'Users',
             'permissions' => [
@@ -80,7 +100,7 @@ return [
             ],
         ],
         'customers' => [
-            'label' => 'Customers',
+            'label' => 'Customers / CRM',
             'permissions' => [
                 'customers.view' => 'View customers',
                 'customers.create' => 'Create customers',
@@ -146,6 +166,22 @@ return [
             ],
         ],
         [
+            'heading' => 'Branch & CRM',
+            'items' => [
+                [
+                    'label' => 'Shop Branch',
+                    'icon' => 'cil-sitemap',
+                    'permission' => 'branches.view',
+                    'active_routes' => ['branches.*', 'branch-roles.*', 'crm.*'],
+                    'children' => [
+                        ['label' => 'Branch', 'permission' => 'branches.view', 'route' => 'branches.index'],
+                        ['label' => 'Branch Role Permission', 'permission' => 'roles.view', 'route' => 'branch-roles.index'],
+                        ['label' => 'CRM', 'permission' => 'users.view', 'route' => 'crm.index'],
+                    ],
+                ],
+            ],
+        ],
+        [
             'heading' => 'Store management',
             'items' => [
                 [
@@ -154,29 +190,35 @@ return [
                     'permission' => 'users.view',
                     'active_routes' => ['users.*'],
                     'children' => [
-                        ['label' => 'List', 'permission' => 'users.view', 'route' => 'users.index'],
-                        ['label' => 'Create', 'permission' => 'users.create', 'soon' => true],
+                        ['label' => 'List', 'permission' => 'users.view', 'route' => 'users.index', 'active_routes' => ['users.index', 'users.edit']],
+                        ['label' => 'Create', 'permission' => 'users.create', 'route' => 'users.create'],
                     ],
-                    [
-                        'label' => 'Customers',
-                        'icon' => 'cil-user',
-                        'permission' => 'customers.view',
-                        'active_routes' => ['pos.*'],
-                        'children' => [
-                            ['label' => 'Customer search', 'permission' => 'customers.view', 'soon' => true],
-                            ['label' => 'Add customer', 'permission' => 'customers.create', 'soon' => true],
-                        ],
+                ],
+                [
+                    'label' => 'Customers',
+                    'icon' => 'cil-user',
+                    'permission' => 'customers.view',
+                    'active_routes' => ['customers.*'],
+                    'children' => [
+                        ['label' => 'Add customer', 'permission' => 'customers.create', 'route' => 'customers.create'],
+                        ['label' => 'List', 'permission' => 'customers.view', 'route' => 'customers.index', 'active_routes' => ['customers.index', 'customers.show', 'customers.edit']],
                     ],
                 ],
                 [
                     'label' => 'Products',
                     'icon' => 'cil-basket',
                     'permission' => 'products.view',
-                    'active_routes' => ['products.*'],
+                    'active_routes' => ['products.*', 'brands.*', 'categories.*', 'unit-types.*', 'variations.*', 'barcodes.*'],
                     'children' => [
-                        ['label' => 'List', 'permission' => 'products.view', 'soon' => true],
-                        ['label' => 'Create', 'permission' => 'products.create', 'soon' => true],
-                        ['label' => 'Categories', 'permission' => 'categories.view', 'soon' => true],
+                        ['label' => 'Add New Product', 'permission' => 'products.create', 'route' => 'products.create'],
+                        ['label' => 'All Products', 'permission' => 'products.view', 'route' => 'products.index'],
+                        ['label' => 'Brands', 'permission' => 'products.view', 'route' => 'brands.index'],
+                        ['label' => 'Categories', 'permission' => 'categories.view', 'route' => 'categories.index'],
+                        ['label' => 'Unit Types', 'permission' => 'products.view', 'route' => 'unit-types.index'],
+                        ['label' => 'Upload Product By CSV', 'permission' => 'products.create', 'route' => 'products.csv-upload'],
+                        ['label' => 'Print Barcode / Labels', 'permission' => 'products.view', 'route' => 'barcodes.print'],
+                        ['label' => 'Barcode Print Report', 'permission' => 'products.view', 'route' => 'barcodes.report'],
+                        ['label' => 'Variations', 'permission' => 'products.view', 'route' => 'variations.index'],
                     ],
                 ],
                 [

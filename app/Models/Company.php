@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Company extends Model
@@ -30,13 +32,28 @@ class Company extends Model
         'deactivated_at' => 'datetime',
     ];
 
-    public function branches()
+    public function branches(): HasMany
     {
-        return $this->hasMany(CompanyBranch::class);
+        return $this->hasMany(Branch::class);
     }
 
-    public function headOfficeBranch()
+    public function headOfficeBranch(): HasOne
     {
-        return $this->hasOne(CompanyBranch::class)->where('is_head_office', true);
+        return $this->hasOne(Branch::class)->where('is_head_office', true);
+    }
+
+    public function users(): HasMany
+    {
+        return $this->hasMany(User::class);
+    }
+
+    public function customers(): HasMany
+    {
+        return $this->hasMany(Customer::class);
+    }
+
+    public function rolePermissions(): HasMany
+    {
+        return $this->hasMany(CompanyRolePermission::class);
     }
 }
