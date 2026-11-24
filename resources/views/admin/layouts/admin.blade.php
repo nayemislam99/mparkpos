@@ -48,6 +48,7 @@
 
   <!-- Custom CSS -->
   <link rel="stylesheet" href="{{ asset('common/css/yajra.dt.coreui.css') }}" />
+  <link rel="stylesheet" href="{{ asset('admin/custom/pos-brand.css') }}" />
 
   {{-- CoreUI config (before body) --}}
   <script src="{{ asset('admin/js/config.js') }}"></script>

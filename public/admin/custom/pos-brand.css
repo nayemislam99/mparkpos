@@ -1,0 +1,152 @@
+/* ==========================================================================
+   M POS Official Brand Theme (Based on mpos.png: #d20101 & #191715)
+   ========================================================================== */
+
+:root,
+[data-coreui-theme="light"] {
+    --pos-brand-primary: #d20101;
+    --pos-brand-primary-rgb: 210, 1, 1;
+    --pos-brand-hover: #b50000;
+    --pos-brand-active: #9b0000;
+    --pos-brand-dark: #191715;
+
+    /* Override CoreUI primary color to match official M POS logo */
+    --cui-primary: #d20101;
+    --cui-primary-rgb: 210, 1, 1;
+    --cui-primary-text-emphasis: #750000;
+    --cui-primary-bg-subtle: #fee2e2;
+    --cui-primary-border-subtle: #fca5a5;
+    --cui-link-color: #d20101;
+    --cui-link-hover-color: #9b0000;
+}
+
+[data-coreui-theme="dark"] {
+    --pos-brand-primary: #e62323;
+    --pos-brand-primary-rgb: 230, 35, 35;
+    --pos-brand-hover: #f03e3e;
+    --pos-brand-active: #d20101;
+    --pos-brand-dark: #141211;
+
+    --cui-primary: #e62323;
+    --cui-primary-rgb: 230, 35, 35;
+    --cui-primary-text-emphasis: #ff9999;
+    --cui-primary-bg-subtle: rgba(210, 1, 1, 0.2);
+    --cui-primary-border-subtle: rgba(210, 1, 1, 0.4);
+    --cui-link-color: #ff6666;
+    --cui-link-hover-color: #ff9999;
+}
+
+/* CoreUI Buttons */
+.btn-primary {
+    --cui-btn-bg: #d20101;
+    --cui-btn-border-color: #d20101;
+    --cui-btn-hover-bg: #b50000;
+    --cui-btn-hover-border-color: #b50000;
+    --cui-btn-active-bg: #9b0000;
+    --cui-btn-active-border-color: #9b0000;
+    --cui-btn-focus-shadow-rgb: 210, 1, 1;
+    color: #fff !important;
+}
+
+.btn-outline-primary {
+    --cui-btn-color: #d20101;
+    --cui-btn-border-color: #d20101;
+    --cui-btn-hover-bg: #d20101;
+    --cui-btn-hover-border-color: #d20101;
+    --cui-btn-active-bg: #9b0000;
+    --cui-btn-active-border-color: #9b0000;
+    --cui-btn-focus-shadow-rgb: 210, 1, 1;
+}
+
+/* Teal action buttons (matching Screenshot edit/actions) */
+.btn-teal {
+    background-color: #0d9488 !important;
+    border-color: #0d9488 !important;
+    color: #fff !important;
+}
+.btn-teal:hover {
+    background-color: #0f766e !important;
+    border-color: #0f766e !important;
+    color: #fff !important;
+}
+
+.btn-success-pos {
+    background-color: #10b981 !important;
+    border-color: #10b981 !important;
+    color: #fff !important;
+}
+.btn-success-pos:hover {
+    background-color: #059669 !important;
+    border-color: #059669 !important;
+    color: #fff !important;
+}
+
+/* Sidebar Active & Hover States */
+.sidebar-dark {
+    --cui-sidebar-bg: #191715;
+    background-color: #191715 !important;
+}
+
+.sidebar-dark .sidebar-header {
+    background-color: #141210;
+}
+
+.sidebar-dark .sidebar-brand {
+    background-color: transparent;
+}
+
+.sidebar-dark .nav-link.active,
+.sidebar-dark .nav-group-toggle.active {
+    color: #fff !important;
+    background-color: #d20101 !important;
+    font-weight: 600;
+}
+
+.sidebar-dark .nav-link:hover {
+    color: #fff;
+    background-color: rgba(210, 1, 1, 0.22) !important;
+}
+
+/* Form Controls Focus Ring */
+.form-control:focus,
+.form-select:focus {
+    border-color: #d20101 !important;
+    box-shadow: 0 0 0 0.25rem rgba(210, 1, 1, 0.2) !important;
+}
+
+.form-check-input:checked {
+    background-color: #d20101 !important;
+    border-color: #d20101 !important;
+}
+
+/* Pagination */
+.page-item.active .page-link {
+    background-color: #d20101 !important;
+    border-color: #d20101 !important;
+}
+
+/* Custom Table Controls */
+.dt-icon:hover {
+    background: rgba(210, 1, 1, 0.1) !important;
+}
+
+table.dataTable.collapsed > tbody > tr > td.dtr-control:before {
+    background: rgba(210, 1, 1, 0.12) !important;
+    border: 1px solid rgba(210, 1, 1, 0.3) !important;
+    color: #d20101 !important;
+}
+
+.pos-eyebrow {
+    color: #d20101 !important;
+}
+
+.pos-low-stock-count {
+    background: #d20101 !important;
+    color: #fff !important;
+}
+
+/* Globally Hide DataTable Export Buttons */
+.dt-toolbar-exports,
+.dt-export-group {
+    display: none !important;
+}

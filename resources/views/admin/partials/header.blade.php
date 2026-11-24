@@ -8,40 +8,58 @@
       </svg>
     </button>
 
-    {{-- <ul class="header-nav d-none d-lg-flex">
-      <li class="nav-item"><a class="nav-link" href="{{ url('/dashboard') }}">Dashboard</a></li>
-      <li class="nav-item"><a class="nav-link" href="#">Users</a></li>
-      <li class="nav-item"><a class="nav-link" href="#">Settings</a></li>
-    </ul> --}}
+    <div class="d-none d-md-flex align-items-center ms-2">
+      <span class="badge bg-secondary-subtle text-secondary border px-2 py-1 small">
+        <i class="bi bi-shop me-1"></i>
+        {{ auth()->user()->branch->name ?? __('messages.all_branches') }}
+      </span>
+    </div>
 
-    {{-- <ul class="header-nav ms-auto">
-      <li class="nav-item"><a class="nav-link" href="#">
-        <svg class="icon icon-lg"><use xlink:href="{{ asset('admin/vendors/@coreui/icons/svg/free.svg') }}#cil-bell"></use></svg>
-      </a></li>
-      <li class="nav-item"><a class="nav-link" href="#">
-        <svg class="icon icon-lg"><use xlink:href="{{ asset('admin/vendors/@coreui/icons/svg/free.svg') }}#cil-list-rich"></use></svg>
-      </a></li>
-      <li class="nav-item"><a class="nav-link" href="#">
-        <svg class="icon icon-lg"><use xlink:href="{{ asset('admin/vendors/@coreui/icons/svg/free.svg') }}#cil-envelope-open"></use></svg>
-      </a></li>
-    </ul> --}}
+    <ul class="header-nav ms-auto align-items-center">
+      {{-- Live clock --}}
+      <li class="nav-item d-none d-lg-flex align-items-center me-3 text-body-secondary small">
+        <i class="bi bi-clock me-1"></i>
+        <span id="pos-header-clock" class="fw-semibold font-monospace">--:--:--</span>
+      </li>
 
-    <ul class="header-nav">
-      {{-- <li class="nav-item py-1"><div class="vr h-100 mx-2 text-body text-opacity-75"></div></li> --}}
-
+      {{-- Quick Sell button --}}
       @can('sales.create')
-        <li class="nav-item">
-          <a class="btn btn-link nav-link py-2 px-2 d-flex align-items-center"
+        <li class="nav-item me-2">
+          <a class="btn btn-warning btn-sm d-flex align-items-center gap-1 text-dark fw-bold px-3 py-1 shadow-sm"
              href="{{ route('pos.terminal') }}"
-             aria-label="POS terminal"
-             title="POS terminal"
-             @if (request()->routeIs('pos.*')) aria-current="page" @endif>
-            <svg class="icon icon-lg">
-              <use xlink:href="{{ asset('admin/vendors/@coreui/icons/svg/free.svg') }}#cil-cart"></use>
-            </svg>
+             aria-label="{{ __('messages.sell') }}"
+             title="{{ __('messages.sell') }}">
+            <i class="bi bi-cart-fill"></i>
+            <span>{{ __('messages.sell') }}</span>
           </a>
         </li>
       @endcan
+
+      {{-- Language toggle --}}
+      <li class="nav-item dropdown me-2">
+        <button class="btn btn-link nav-link py-2 px-2 d-flex align-items-center gap-1" type="button"
+                aria-label="{{ __('messages.language') }}" title="{{ __('messages.language') }}"
+                aria-expanded="false" data-coreui-toggle="dropdown">
+          <i class="bi bi-translate fs-5"></i>
+          <span class="small fw-semibold d-none d-sm-inline">{{ app()->getLocale() === 'bn' ? 'বাংলা' : 'English' }}</span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" style="--cui-dropdown-min-width: 8rem;">
+          <li>
+            <a class="dropdown-item d-flex align-items-center justify-content-between {{ app()->getLocale() === 'en' ? 'active' : '' }}"
+               href="{{ route('locale.switch', 'en') }}">
+              <span>English</span>
+              @if(app()->getLocale() === 'en') <i class="bi bi-check-lg"></i> @endif
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item d-flex align-items-center justify-content-between {{ app()->getLocale() === 'bn' ? 'active' : '' }}"
+               href="{{ route('locale.switch', 'bn') }}">
+              <span>বাংলা</span>
+              @if(app()->getLocale() === 'bn') <i class="bi bi-check-lg"></i> @endif
+            </a>
+          </li>
+        </ul>
+      </li>
 
       {{-- Theme toggle --}}
       <li class="nav-item dropdown">
@@ -96,7 +114,7 @@
               <svg class="icon me-2">
                   <use xlink:href="{{ asset('admin/vendors/@coreui/icons/svg/free.svg#cil-account-logout') }}"></use>
               </svg>
-              Logout
+              {{ __('messages.logout') }}
           </a>
 
           <form id="logout-form"
@@ -111,3 +129,16 @@
     </ul>
   </div>
 </header>
+<script>
+  (function() {
+    function tick() {
+      var el = document.getElementById('pos-header-clock');
+      if (el) {
+        var d = new Date();
+        el.textContent = d.toLocaleTimeString();
+      }
+    }
+    setInterval(tick, 1000);
+    tick();
+  })();
+</script>
